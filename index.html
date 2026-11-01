@@ -87,6 +87,24 @@ p{margin:0}
 #errbox b{font-family:'Lilita One','Arial Black',sans-serif;font-weight:400;font-size:17px;display:block}
 #errbox code{display:block;margin:6px 0;font:700 12px/1.3 ui-monospace,Menlo,Consolas,monospace;overflow-wrap:anywhere;user-select:text;-webkit-user-select:text}
 #campSheet .pips{margin:0 auto}
+#styleArt{height:min(56vw,260px);border:4px solid var(--ink);border-radius:20px;overflow:hidden;box-shadow:0 6px 0 var(--ink),inset 0 0 0 3px var(--gold2)}
+#styleArt canvas{width:100%;height:100%;display:block}
+.chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px;margin:8px 0 16px}
+.chip{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 6px;border:3px solid var(--ink);border-radius:14px;background:#f8ecd0;cursor:pointer;font:900 14px var(--body);color:var(--ink);box-shadow:0 4px 0 var(--ink)}
+.chip:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.chip.on{background:var(--gold);box-shadow:0 4px 0 var(--ink),0 0 0 4px rgba(255,207,74,.5)}
+.chip .sw{width:40px;height:40px;border-radius:50%;border:3px solid var(--ink)}
+.chip small{font-weight:800;font-size:12px;color:#6b5636;display:flex;align-items:center;gap:4px}
+.chip small .coin{width:14px;height:14px;border-width:2px}
+.boosts{display:grid;gap:10px;text-align:left}
+.boost{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;padding:10px;border:3px solid var(--ink);border-radius:14px;background:#f8ecd0;cursor:pointer;font-family:var(--body);color:var(--ink);text-align:left}
+.boost.on{background:#c8f5d8;box-shadow:inset 0 0 0 3px #36c862}
+.boost b{font-family:var(--display);font-weight:400;font-size:18px;display:block}
+.boost .d{font-size:13px;font-weight:700;color:#6b5636}
+.boost .ic{width:44px;height:44px;border-radius:50%;border:3px solid var(--ink);display:grid;place-items:center;font-family:var(--display);font-size:20px;color:#fff;-webkit-text-stroke:2px var(--ink);paint-order:stroke fill}
+.boost .pr{display:flex;align-items:center;gap:5px;font-family:var(--display);font-size:18px}
+.boost .pr .coin{width:18px;height:18px;border-width:2px}
+.trophy-ok{color:#14907a;font-family:var(--display);font-size:18px}
 [hidden],#campSheet[hidden]{display:none!important}
 #camp{padding:0;overflow:hidden;background:#123222;touch-action:none}
 #camp.on{display:block}
@@ -214,6 +232,32 @@ p{margin:0}
   <div class="row"><button class="btn green" id="csBuy"></button><button class="btn alt" id="csClose">Close</button></div>
 </div>
 
+<section class="screen full" id="trophies">
+  <div class="wrap">
+    <div class="row between"><h1 class="h1">Trophies</h1><div class="row"><span class="coins" id="trophyCount"></span><button class="btn alt back">Back</button></div></div>
+    <p class="lead" style="text-align:left">Every trophy pays coins the moment you earn it.</p>
+    <div class="tablet" style="width:100%"><div class="list" id="trophyList"></div></div>
+  </div>
+</section>
+
+<section class="screen full" id="style">
+  <div class="wrap">
+    <div class="row between"><h1 class="h1">Customize Biscuit</h1><div class="row"><span class="coins"><span class="coin"></span><span class="cCoins">0</span></span><button class="btn alt back">Back</button></div></div>
+    <div id="styleArt"></div>
+    <div class="tablet" style="width:100%;text-align:left" id="styleList"></div>
+  </div>
+</section>
+
+<section class="screen dim" id="prep">
+  <div class="tablet" style="width:min(520px,100%)">
+    <h1 style="font-size:clamp(30px,8vw,42px)" id="prepTitle">Temple 1</h1>
+    <p style="font-weight:800" id="prepSub"></p>
+    <h3 style="font-size:20px;text-align:left">Boosters for this run</h3>
+    <div class="boosts" id="boostList"></div>
+    <div class="row"><button class="btn gold big" id="prepGo">Start</button><button class="btn alt" id="prepBack">Back</button></div>
+  </div>
+</section>
+
 <section class="screen full" id="tasks">
   <div class="wrap">
     <div class="row between"><h1 class="h1">Tasks</h1><div class="row"><span class="coins"><span class="coin"></span><span class="cCoins">0</span></span><button class="btn alt back">Back</button></div></div>
@@ -271,11 +315,13 @@ if(!CanvasRenderingContext2D.prototype.roundRect){CanvasRenderingContext2D.proto
 // ---------- save ----------
 const KEY='templepup_v1';
 const fresh=()=>({unlocked:1,best:{},muted:false,music:true,coins:0,bestEndless:0,camp:{tree:0,falls:0,idol:0,bridge:0,garden:0,tower:0},
-  stats:{gems:0,combos:0,wins:0,powers:0,coins:0,skills:0},tasks:[],taskTier:0,daily:{last:'',streak:0},cleared:{}});
+  stats:{gems:0,combos:0,wins:0,powers:0,coins:0,skills:0,maxCombo:0,perfect:0},tasks:[],taskTier:0,daily:{last:'',streak:0},cleared:{},
+  ach:[],skin:{fur:'golden',armor:'jade',hat:'band'},styles:['golden','jade','band','none']});
 let save=fresh();
 try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&typeof s==='object')save=Object.assign(fresh(),s)}catch(e){}
 save.camp=Object.assign(fresh().camp,save.camp);save.stats=Object.assign(fresh().stats,save.stats);save.daily=Object.assign(fresh().daily,save.daily);
 if(!Array.isArray(save.tasks))save.tasks=[];if(!save.cleared||typeof save.cleared!=='object')save.cleared={};
+if(!Array.isArray(save.ach))save.ach=[];if(!Array.isArray(save.styles))save.styles=fresh().styles;save.skin=Object.assign(fresh().skin,save.skin);
 const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(save))}catch(e){}};
 const cleared=()=>save.unlocked-1;
 
@@ -401,13 +447,14 @@ const RAINBOW_BODY=(()=>{const cv=document.createElement('canvas');cv.width=cv.h
   const cols=['#ff3b4a','#ff9a1f','#ffd21f','#2fd05a','#2f8cff','#9a4dff'];for(let i=0;i<6;i++){c.beginPath();c.moveTo(0,0);c.arc(0,0,r,i/6*TAU,(i+1)/6*TAU);c.closePath();c.fillStyle=cols[i];c.fill()}
   c.fillStyle=rg(c,0,0,r,'rgba(255,255,255,.7)','rgba(255,255,255,0)',0,0);c.beginPath();c.arc(0,0,r,0,TAU);c.fill();starPath(c,0,0,r*.45);c.fillStyle='#fff';c.fill();
   c.beginPath();c.arc(0,0,r-r*.04,0,TAU);c.lineWidth=r*.09;c.strokeStyle='rgba(15,6,0,.8)';c.stroke();return cv})();
-const PU={slow:{n:'SLOW DOWN!',c:'#7ce0ff',rgb:'124,224,255'},reverse:{n:'PUSH BACK!',c:'#ffffff',rgb:'255,255,255'},bomb:{n:'KABOOM!',c:'#ff6b4a',rgb:'255,107,74'},aim:{n:'SUPER AIM!',c:'#ffcf4a',rgb:'255,207,74'}};
+const PU={slow:{n:'SLOW DOWN!',c:'#7ce0ff',rgb:'124,224,255'},reverse:{n:'PUSH BACK!',c:'#ffffff',rgb:'255,255,255'},bomb:{n:'KABOOM!',c:'#ff6b4a',rgb:'255,107,74'},aim:{n:'SUPER AIM!',c:'#ffcf4a',rgb:'255,207,74'},zap:{n:'COLOR ZAP!',c:'#d08bff',rgb:'208,139,255'}};
 const PU_ICON={};
 for(const k in PU){const cv=document.createElement('canvas');cv.width=cv.height=64;const c=cv.getContext('2d');c.translate(32,32);const r=30;
   circ(c,0,0,r*.6,'rgba(20,10,0,.82)',false);c.strokeStyle='#fff';c.fillStyle='#fff';c.lineWidth=4;c.lineCap='round';const s=r*.34;
   if(k==='slow'){c.beginPath();c.moveTo(-s,-s);c.lineTo(s,-s);c.lineTo(-s,s);c.lineTo(s,s);c.closePath();c.stroke()}
   else if(k==='reverse'){c.beginPath();c.arc(0,0,s,-.4,Math.PI*1.4);c.stroke();poly(c,[-s*1.3,-s*.2,-s*.2,-s*.2,-s*.75,-s*1.1],'#fff',false)}
   else if(k==='bomb'){circ(c,0,s*.15,s*.85,'#fff',false);line(c,s*.4,-s*.5,s*.9,-s,3,'#fff');circ(c,s,-s*1.1,3,'#ffcf4a',false)}
+  else if(k==='zap'){poly(c,[s*.3,-s*1.3,-s*.8,s*.15,-s*.05,s*.15,-s*.35,s*1.3,s*.8,-s*.2,s*.05,-s*.2],'#fff',false)}
   else{c.beginPath();c.arc(0,0,s*.8,0,TAU);c.moveTo(-s*1.2,0);c.lineTo(s*1.2,0);c.moveTo(0,-s*1.2);c.lineTo(0,s*1.2);c.stroke()}
   PU_ICON[k]=cv}
 function drawGem(c,x,y,r,ci,pu,t=0,rot=0,shadow=true,frozen=false){
@@ -424,33 +471,57 @@ function drawGem(c,x,y,r,ci,pu,t=0,rot=0,shadow=true,frozen=false){
 // ---------- Biscuit, seen from above in his stone socket (faces +x). Drawn once into sprites, then rotated to aim. ----------
 const FUR=['#ffd99a','#c98a3f'],TURQ='#21c2b0',TURQD='#0b6e62',GOLDL='#fff1a8',GOLDD='#b8820e';
 const goldG=(c,x,y,w,h)=>lg(c,x,y,x,y+h,[GOLDL,'#f5c542',GOLDD]);
-function paw(c,x,y,s){ell(c,x,y,13,9.5,rg(c,x,y,13,'#ffe8c4','#d29a55'),true,s*.35,2.5);for(let k=-1;k<=1;k++)line(c,x+7,y+k*4.5,x+12,y+k*5,1.6,'rgba(60,30,10,.55)')}
-function pupTop(c,blink){
+// Biscuit's styles: fur, armor and headgear (bought with coins in Customize)
+const FURS=[
+  {id:'golden',n:'Golden',fur:['#ffdca0','#b5742c'],head:['#ffe3ae','#c4843c'],ear:['#d9944e','#7a4718'],snout:['#fff6e4','#e2bf86'],cost:0},
+  {id:'choco',n:'Chocolate',fur:['#c08a58','#5a3418'],head:['#cc9664','#6a3e1c'],ear:['#6a3e1c','#2e180a'],snout:['#f0d4b0','#b08860'],cost:300},
+  {id:'snow',n:'Snowy',fur:['#ffffff','#a8b6c2'],head:['#ffffff','#b8c4ce'],ear:['#8a98a6','#4a5866'],snout:['#ffffff','#d0d8de'],cost:400},
+  {id:'midnight',n:'Midnight',fur:['#6a6a82','#22222e'],head:['#76768e','#2a2a38'],ear:['#2a2a38','#101016'],snout:['#d0d0dc','#8a8a9a'],cost:600},
+  {id:'dalmatian',n:'Dalmatian',fur:['#ffffff','#c8ccd2'],head:['#ffffff','#d0d4da'],ear:['#2a2a30','#0e0e12'],snout:['#ffffff','#dcdfe4'],spots:true,cost:700}];
+const ARMORS=[
+  {id:'jade',n:'Jade',c:['#6ff5e2','#0a5e54'],tile:'#b8fff2',cost:0},
+  {id:'ruby',n:'Ruby',c:['#ff9a9a','#7a0d1a'],tile:'#ffd6d6',cost:250},
+  {id:'sapphire',n:'Sapphire',c:['#96ccff','#0d2e7a'],tile:'#d6ecff',cost:250},
+  {id:'amethyst',n:'Amethyst',c:['#dcb0ff','#3e0d7a'],tile:'#f2dcff',cost:350},
+  {id:'royal',n:'Royal Gold',c:['#fff1a8','#a87a08'],tile:'#ffffff',cost:800}];
+const HATS=[{id:'band',n:'Gold Band',cost:0},{id:'crown',n:'Crown',cost:500},{id:'feathers',n:'Feather Crest',cost:400},{id:'none',n:'No Hat',cost:0}];
+function curSkin(){const f=FURS.find(x=>x.id===save.skin.fur)||FURS[0],a=ARMORS.find(x=>x.id===save.skin.armor)||ARMORS[0],h=HATS.find(x=>x.id===save.skin.hat)||HATS[0];return{f,a,h,key:f.id+'|'+a.id+'|'+h.id}}
+function paw(c,x,y,s,F){ell(c,x,y,13,9.5,rg(c,x,y,13,F.snout[0],F.fur[1]),true,s*.35,2.5);for(let k=-1;k<=1;k++)line(c,x+7,y+k*4.5,x+12,y+k*5,1.6,'rgba(60,30,10,.55)')}
+function pupTop(c,blink,S){
+  S=S||curSkin();const F=S.f,A=S.a;
   c.fillStyle='rgba(0,0,0,.35)';c.beginPath();c.ellipse(5,9,60,52,0,0,TAU);c.fill();
   // curly tail
-  c.beginPath();c.moveTo(-42,4);c.bezierCurveTo(-62,0,-70,18,-58,28);c.lineCap='round';c.lineWidth=14;c.strokeStyle=INK;c.stroke();c.lineWidth=9;c.strokeStyle=FUR[0];c.stroke();
-  for(const s of[-1,1]){paw(c,-32,s*33,s);paw(c,24,s*37,s)}
+  c.beginPath();c.moveTo(-42,4);c.bezierCurveTo(-62,0,-70,18,-58,28);c.lineCap='round';c.lineWidth=14;c.strokeStyle=INK;c.stroke();c.lineWidth=9;c.strokeStyle=F.fur[0];c.stroke();
+  for(const s of[-1,1]){paw(c,-32,s*33,s,F);paw(c,24,s*37,s,F)}
   // body
-  ell(c,-8,0,41,36,rg(c,-8,0,46,'#ffdca0','#b5742c',-.25,-.45),true,0,3);
-  // jade-and-gold tribal saddle on his back
-  ell(c,-12,0,31,27,rg(c,-12,0,31,'#6ff5e2','#0a5e54',-.3,-.35),true,0,2.5);
+  ell(c,-8,0,41,36,rg(c,-8,0,46,F.fur[0],F.fur[1],-.25,-.45),true,0,3);
+  if(F.spots)for(const[sx,sy,sr] of[[-34,-24,5],[-40,16,6],[4,-30,4],[2,28,5],[-26,30,3.5]])circ(c,sx,sy,sr,'#1e1e24',false);
+  // tribal saddle on his back
+  ell(c,-12,0,31,27,rg(c,-12,0,31,A.c[0],A.c[1],-.3,-.35),true,0,2.5);
   c.save();c.beginPath();c.ellipse(-12,0,31,27,0,0,TAU);c.clip();
-  c.lineWidth=3.2;c.strokeStyle='#f5c542';c.beginPath();c.ellipse(-12,0,20,17,0,0,TAU);c.stroke();
+  c.lineWidth=3.2;c.strokeStyle=A.id==='royal'?'#ffffff':'#f5c542';c.beginPath();c.ellipse(-12,0,20,17,0,0,TAU);c.stroke();
   for(let i=0;i<10;i++){const a=i/10*TAU+.31;c.beginPath();c.moveTo(-12+Math.cos(a)*11,Math.sin(a)*9.5);c.lineTo(-12+Math.cos(a)*34,Math.sin(a)*30);c.stroke()}
-  for(let i=0;i<10;i++){const a=(i+.5)/10*TAU+.31;rr(c,-12+Math.cos(a)*26-3,Math.sin(a)*22-3,6,6,1.5,'#b8fff2',false);rr(c,-12+Math.cos(a)*15-2,Math.sin(a)*13-2,4,4,1,'#ff6a5a',false)}
+  for(let i=0;i<10;i++){const a=(i+.5)/10*TAU+.31;rr(c,-12+Math.cos(a)*26-3,Math.sin(a)*22-3,6,6,1.5,A.tile,false);rr(c,-12+Math.cos(a)*15-2,Math.sin(a)*13-2,4,4,1,'#ff6a5a',false)}
   c.restore();c.beginPath();c.ellipse(-12,0,31,27,0,0,TAU);c.lineWidth=2.5;c.strokeStyle=INK;c.stroke();
   circ(c,-12,0,11.5,goldG(c,0,-11,0,23),true,2);circ(c,-12,0,8.5,'#2a1a0c',true,1.5);
+  // feather crest fans out over his back
+  if(S.h.id==='feathers')for(let i=-2;i<=2;i++){c.save();c.translate(14,i*6);c.rotate(Math.PI+i*.34);ell(c,22,0,22,6,['#ff4f5e','#ffcf4a','#36c862','#3fa1ff','#b06bff'][i+2],true,0,2);line(c,4,0,40,0,1.2,'rgba(0,0,0,.35)');c.restore()}
   // floppy ears
-  for(const s of[-1,1])ell(c,14,s*25,18,9.5,rg(c,14,s*25,18,'#d9944e','#7a4718'),true,s*.55,2.5);
-  // head with gold headband and ruby
-  circ(c,24,0,25,rg(c,18,-6,30,'#ffe3ae','#c4843c'),true,3);
-  c.beginPath();c.moveTo(12,-22);c.quadraticCurveTo(20,0,12,22);c.lineWidth=8;c.strokeStyle=INK;c.stroke();c.lineWidth=5;c.strokeStyle='#f5c542';c.stroke();
-  circ(c,17,0,6.5,rg(c,17,0,7,'#ffb0b0','#a3101e'),true,2);circ(c,15.5,-2,1.8,'#fff',false);
+  for(const s of[-1,1])ell(c,14,s*25,18,9.5,rg(c,14,s*25,18,F.ear[0],F.ear[1]),true,s*.55,2.5);
+  // head
+  circ(c,24,0,25,rg(c,18,-6,30,F.head[0],F.head[1]),true,3);
+  if(F.spots)for(const[sx,sy,sr] of[[14,-12,4],[30,16,3.5],[20,10,2.5]])circ(c,sx,sy,sr,'#1e1e24',false);
+  // headgear
+  if(S.h.id==='band'||S.h.id==='feathers'){c.beginPath();c.moveTo(12,-22);c.quadraticCurveTo(20,0,12,22);c.lineWidth=8;c.strokeStyle=INK;c.stroke();c.lineWidth=5;c.strokeStyle='#f5c542';c.stroke();
+    circ(c,17,0,6.5,rg(c,17,0,7,'#ffb0b0','#a3101e'),true,2);circ(c,15.5,-2,1.8,'#fff',false)}
+  if(S.h.id==='crown'){for(let i=-2;i<=2;i++)poly(c,[13,i*8.5-4.5,13,i*8.5+4.5,-1,i*8.5],goldG(c,0,-22,0,44),true,2);
+    c.beginPath();c.moveTo(13,-23);c.quadraticCurveTo(21,0,13,23);c.lineWidth=9;c.strokeStyle=INK;c.stroke();c.lineWidth=6;c.strokeStyle='#f5c542';c.stroke();
+    for(const[gy,gc] of[[-12,'#3fa1ff'],[0,'#e3202e'],[12,'#36c862']])circ(c,16,gy,3.4,gc,true,1.5)}
   // snout
-  ell(c,47,0,13,13.5,rg(c,45,-3,15,'#fff6e4','#e2bf86'),true,0,2.5);
+  ell(c,47,0,13,13.5,rg(c,45,-3,15,F.snout[0],F.snout[1]),true,0,2.5);
   // big eyes
   for(const s of[-1,1]){
-    if(blink){circ(c,35,s*13,10.5,rg(c,35,s*13,11,'#ffe3ae','#c4843c'),true,2.5);line(c,30,s*13,41,s*13,2.5)}
+    if(blink){circ(c,35,s*13,10.5,rg(c,35,s*13,11,F.head[0],F.head[1]),true,2.5);line(c,30,s*13,41,s*13,2.5)}
     else{circ(c,35,s*13,10.5,'#fff',true,2.5);circ(c,39,s*13,6.2,'#5a3416',false);circ(c,40,s*13,3.6,INK,false);circ(c,41.5,s*13-2.6,2,'#fff',false)}
     line(c,26,s*24,38,s*25.5,3)}
   ell(c,54,0,5.5,7.5,INK,false);circ(c,53,-2.5,1.6,'#fff',false);
@@ -464,14 +535,14 @@ function stoneDisc(c,r){
   for(let i=0;i<8;i++){const a=i/8*TAU+.2;rr(c,Math.cos(a)*r*.88-3,Math.sin(a)*r*.88-3,6,6,1,TURQ,false)}
 }
 const HSPR={};
-function heroSprites(P){P=clamp(Math.round(P*4)/4,.75,4);if(HSPR[P])return HSPR[P];
-  const mk=fn=>{const x0=-80,y0=-62,w=150,h=132;const cv=document.createElement('canvas');cv.width=Math.ceil(w*P);cv.height=Math.ceil(h*P);const c=cv.getContext('2d');c.scale(P,P);c.translate(-x0,-y0);fn(c);return{cv,x0,y0,w,h}};
-  return HSPR[P]={open:mk(c=>pupTop(c,false)),shut:mk(c=>pupTop(c,true))}}
+function heroSprites(P,S){P=clamp(Math.round(P*4)/4,.75,4);S=S||curSkin();const key=P+'|'+S.key;if(HSPR[key])return HSPR[key];
+  const mk=fn=>{const x0=-84,y0=-62,w=154,h=132;const cv=document.createElement('canvas');cv.width=Math.ceil(w*P);cv.height=Math.ceil(h*P);const c=cv.getContext('2d');c.scale(P,P);c.translate(-x0,-y0);fn(c);return{cv,x0,y0,w,h}};
+  return HSPR[key]={open:mk(c=>pupTop(c,false,S)),shut:mk(c=>pupTop(c,true,S))}}
 function spr(c,s){c.drawImage(s.cv,s.x0,s.y0,s.w,s.h)}
 function fireball(c,x,y,r){glow(c,x,y,r*2,'255,90,20',.9);glow(c,x,y,r*1.4,'255,170,40',.9);glow(c,x,y,r*.9,'255,250,200',1)}
 // draws Biscuit centered at 0,0 facing o.aim; P = device pixels per local unit
 function drawHero(c,t,o,P){
-  const H=heroSprites(P);c.save();c.rotate(o.aim);c.translate(-(o.recoil||0)*6,0);
+  const H=heroSprites(P,o.skin);c.save();c.rotate(o.aim);c.translate(-(o.recoil||0)*6,0);
   spr(c,o.blink?H.shut:H.open);
   drawGem(c,-12,0,8,o.nxt,null,t,0,false);
   const rgb=o.special==='fire'?'255,140,40':o.special==='rainbow'?'255,255,255':COLORS[o.cur].rgb;
@@ -606,11 +677,11 @@ function updStorm(dt){storm.t-=dt;storm.flash=Math.max(0,storm.flash-dt*2.2);sto
   if(storm.t<=0){storm.t=rnd(8,15);storm.flash=.5;const x=rnd(W*.1,W*.9);storm.bolt=bolt(x,-10,x+rnd(-140,140),H*rnd(.35,.7),70);storm.boltA=1;setTimeout(()=>SFX.play('thunder',1),300)}}
 
 // ---------- levels, camp, tasks, skills ----------
-const LEVELS=32;
-// 32 temples: the six track shapes repeat in rounds, mirrored every other round, each round faster with more gems.
+const LEVELS=50;
+// 50 temples: the six track shapes repeat in rounds, mirrored every other round, each round faster with more gems.
 function levelCfg(n){const round=Math.floor((n-1)/6),ti=(n-1)%6;return{ti,track:TRACKS[ti],flip:round%2===1,stone:(ti+round)%6,
-  name:TRACKS[ti].name+(round?' '+['','II','III','IV','V','VI'][round]:''),
-  colors:Math.min(6,4+(n>=3?1:0)+(n>=8?1:0)),count:44+n*4,speed:32+n*1.6+round*4,reward:60+n*12}}
+  name:TRACKS[ti].name+(round?' '+['','II','III','IV','V','VI','VII','VIII','IX'][round]:''),
+  colors:Math.min(6,4+(n>=3?1:0)+(n>=8?1:0)),count:Math.round(44+n*3.5),speed:32+n*1.1+round*3,reward:60+n*12}}
 const CAMP=[
   {k:'tree',n:'Treehouse',d:'Biscuit’s home in the giant fig tree.',hs:[36,96,160,210],m:[110,92]},
   {k:'falls',n:'Waterfall Pool',d:'Bring the dry falls back to life.',hs:[496,86,144,180],m:[578,76]},
@@ -642,6 +713,8 @@ const ICON={
   star:'<svg viewBox="0 0 24 24"><path d="m12 2 3 7 7 .6-5.4 4.6 1.7 7-6.3-3.9L5.7 21l1.7-7L2 9.6 9 9z" fill="#fff" stroke="#2b1d10" stroke-width="1.6" stroke-linejoin="round"/></svg>',
   inf:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M7 8c-5 0-5 8 0 8s5-8 10-8 5 8 0 8-5-8-10-8z"/></svg>',
   hut:'<svg viewBox="0 0 24 24"><path d="M3 12 12 4l9 8h-3v8H6v-8z" fill="#fff" stroke="#2b1d10" stroke-width="1.6" stroke-linejoin="round"/></svg>',
+  trophy:'<svg viewBox="0 0 24 24"><path d="M7 3h10v5a5 5 0 0 1-10 0zM7 5H4a3 3 0 0 0 3 5M17 5h3a3 3 0 0 1-3 5M12 13v4M8 21h8l-1-4H9z" fill="#fff1a8" stroke="#2b1d10" stroke-width="1.7" stroke-linejoin="round"/></svg>',
+  paw:'<svg viewBox="0 0 24 24" fill="#fff" stroke="#2b1d10" stroke-width="1.5"><ellipse cx="12" cy="16" rx="5.5" ry="4.5"/><circle cx="6" cy="10" r="2.3"/><circle cx="10" cy="6.5" r="2.3"/><circle cx="14" cy="6.5" r="2.3"/><circle cx="18" cy="10" r="2.3"/></svg>',
   check:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>',
   gift:'<svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="2" fill="#fff" stroke="#2b1d10" stroke-width="1.6"/><path d="M12 9v12M3 13h18" stroke="#2b1d10" stroke-width="1.6"/><path d="M12 9c-2-4-6-4-6-1s4 1 6 1c2 0 6 2 6-1s-4-3-6 1z" fill="#fff" stroke="#2b1d10" stroke-width="1.6"/></svg>'
 };
@@ -665,16 +738,16 @@ function resize(){DPR=Math.min(TOUCH?1.5:2,devicePixelRatio||1);W=innerWidth;H=i
   if(G)fit();buildJungle();arts.forEach(sizeArt);campCache.key=''}
 function toWorld(e){return[(e.clientX-OX)/SC,(e.clientY-OY)/SC]}
 
-function startLevel(n,endless=false){
+function startLevel(n,endless=false,boost={}){
   const cfg=endless?{ti:Math.floor(Math.random()*6),colors:4,count:Infinity,speed:30,reward:0}:levelCfg(n);
   if(endless)cfg.track=TRACKS[cfg.ti];
   paused=false;show(null);$('#hud').classList.add('on');$('#skills').classList.add('on');buildSkills();
   chooseBoard();fit();const sx=BW/800,sy=BH/800;
   const fx=x=>cfg.flip?800-x:x;
   const P=makePath(cfg.track.pts().map(([x,y])=>[fx(x)*sx,y*sy])),dog=[fx(cfg.track.dog[0])*sx,cfg.track.dog[1]*sy];
-  const lives=endless?1:3+(save.camp.idol>=3?1:0);
+  const lives=(endless?1:3+(save.camp.idol>=3?1:0))+(boost.heart?1:0);
   G={n,endless,cfg,P,dog,balls:[],shots:[],fx:[],pops:[],bolts:[],score:0,coins:0,lives,maxLives:lives,combo:0,aim:-Math.PI/2,cool:0,
-     slowT:0,revT:0,aimT:0,iceT:0,energy:0,special:null,state:'play',time:0,warnT:0,lastC:-1,run:0,stateT:0,recoil:0,shake:0,flash:0,
+     slowT:0,revT:0,aimT:0,iceT:0,energy:boost.energy?100:0,boost,special:null,state:'play',time:0,warnT:0,lastC:-1,run:0,stateT:0,recoil:0,shake:0,flash:0,
      flies:Array.from({length:10},()=>({x:rnd(0,BW),y:rnd(0,BH),p:rnd(0,TAU)}))};
   buildBg(P,dog,cfg.stone??cfg.ti,endless?Date.now()%9999:n);buildJungle();
   resetChain();
@@ -689,7 +762,7 @@ function newColor(){
   G.run=c===G.lastC?G.run+1:1;G.lastC=c;return c;
 }
 function spawn(){
-  const B=G.balls,puRate=.035*(save.camp.tower>=3?1.5:1);
+  const B=G.balls,puRate=.035*(save.camp.tower>=3?1.5:1)*(G.boost&&G.boost.lucky?2:1);
   while(G.toSpawn>0&&(!B.length||B[0].s>=0)){
     const s=B.length?B[0].s-D:0;const pu=G.runT>4&&Math.random()<puRate?pick(Object.keys(PU)):null;
     B.unshift({c:newColor(),s,rs:s,pu,ins:1});G.toSpawn--;
@@ -726,7 +799,7 @@ function matchAt(i){
   while(r<B.length-1&&B[r+1].c===c&&B[r+1].s-B[r].s<=D+2)r++;
   const n=r-l+1;if(n<3)return false;
   const removed=B.splice(l,n);
-  G.combo++;const pts=n*10*G.combo+(n>3?(n-3)*20:0);G.score+=pts;gain(n+(G.combo>1?2:0));save.stats.gems+=n;if(G.combo>1)save.stats.combos++;
+  G.combo++;save.stats.maxCombo=Math.max(save.stats.maxCombo||0,G.combo);const pts=n*10*G.combo+(n>3?(n-3)*20:0);G.score+=pts;gain(n+(G.combo>1?2:0));save.stats.gems+=n;if(G.combo>1)save.stats.combos++;
   const mid=removed[Math.floor(n/2)],[mx,my]=posAt(G.P,mid.rs);
   G.pops.push({x:mx,y:my,s:'+'+pts,t:0,big:false});
   if(G.combo>1){G.pops.push({x:mx,y:my-38,s:`COMBO x${G.combo}!`,t:0,big:true});SFX.play('combo',G.combo);G.shake=Math.max(G.shake,4+G.combo*2)}
@@ -742,6 +815,8 @@ function triggerPU(b){
   if(b.pu==='reverse')G.revT=3;
   if(b.pu==='aim')G.aimT=10;
   if(b.pu==='bomb'){const s0=b.s;const gone=G.balls.filter(o=>Math.abs(o.s-s0)<3.3*D);SFX.play('boom');G.shake=14;G.fx.push({k:'ring',x,y,t:0,life:.55,c:'#ff8a3a',r:150});removeBalls(gone,10)}
+  if(b.pu==='zap'){const gone=G.balls.filter(o=>o.c===b.c&&o.rs>-R);SFX.play('zap');G.flash=.35;G.shake=10;
+    for(const o of gone){const[ox,oy]=posAt(G.P,o.rs);G.bolts.push({pts:bolt(x,y,ox,oy,16),t:0,life:.45,w:.8})}removeBalls(gone,15)}
 }
 // ---------- skills ----------
 function buildSkills(){
@@ -788,7 +863,7 @@ function update(dt){
   if(bs.length){
     const head=bs[bs.length-1];
     if(G.revT>0){let j=1;while(j<bs.length&&bs[j].s-bs[j-1].s<=D+.5)j++;for(let k=0;k<j;k++)bs[k].s-=G.cfg.speed*2*dt}
-    else if(G.iceT<=0||G.rush){let v=G.cfg.speed;if(G.rush){v*=7;if(head.s>P.L*.27||G.runT>5)G.rush=false}if(G.slowT>0)v*=.35;if(!G.rush&&head.s>P.L*.8)v*=.6;bs[0].s+=v*dt}
+    else if(G.iceT<=0||G.rush){let v=G.cfg.speed;if(G.rush){v*=7;if(head.s>P.L*.27||G.runT>5)G.rush=false}if(G.slowT>0)v*=.35;if(!G.rush&&head.s>P.L*.8)v*=.6;if(!G.rush&&G.boost&&G.boost.slow&&G.time<25)v*=.6;bs[0].s+=v*dt}
     pushFrom(1);
     const joins=[];
     for(let i=1;i<bs.length;i++){const gap=bs[i].s-bs[i-1].s;
@@ -915,15 +990,17 @@ const nextDay=()=>save.daily.last===yesterday()?(save.daily.streak%7)+1:1;
 let dailyShown=false;
 function tasksReady(){return save.tasks.filter(tk=>taskProg(tk)>=tk.n).length}
 function openHub(){
-  G=null;paused=false;hideHud();SFX.setPlaying(true);ensureTasks();buildJungle();
+  G=null;paused=false;hideHud();SFX.setPlaying(true);ensureTasks();buildJungle();checkAch();
   if(dailyReady()&&!dailyShown){dailyShown=true;openDaily();return}
   const ready=tasksReady();
   const tiles=[
     {n:'Adventure',ic:ICON.star,col:'#e8452c',s:`${Math.min(cleared(),LEVELS)} of ${LEVELS} temples cleared`,go:openLevels},
-    {n:'Endless',ic:ICON.inf,col:'#8a33e8',s:save.bestEndless?`Best score: ${save.bestEndless}`:'How long can you last?',go:()=>startLevel(0,true)},
+    {n:'Endless',ic:ICON.inf,col:'#8a33e8',s:save.bestEndless?`Best score: ${save.bestEndless}`:'How long can you last?',go:()=>openPrep(0,true)},
     {n:'Jungle Camp',ic:ICON.hut,col:'#1fae94',s:`Camp level ${campLv()} · +${Math.round((coinBonus()-1)*100)}% coins`,go:openCamp},
     {n:'Tasks',ic:ICON.check,col:'#1a74e8',s:ready?`${ready} ready to claim!`:'Earn coins for your camp',badge:ready,go:openTasks},
-    {n:'Daily Treasure',ic:ICON.gift,col:'#f5b80c',s:dailyReady()?'Your treasure is ready!':`Day ${save.daily.streak} claimed · back tomorrow`,badge:dailyReady()?'!':0,go:()=>openDaily()}
+    {n:'Daily Treasure',ic:ICON.gift,col:'#f5b80c',s:dailyReady()?'Your treasure is ready!':`Day ${save.daily.streak} claimed · back tomorrow`,badge:dailyReady()?'!':0,go:()=>openDaily()},
+    {n:'Trophies',ic:ICON.trophy,col:'#c98f10',s:`${save.ach.length} of ${ACH.length} earned`,go:openTrophies},
+    {n:'Customize Biscuit',ic:ICON.paw,col:'#e3207a',s:`${save.styles.length} styles owned`,go:openStyle}
   ];
   const box=$('#tiles');box.innerHTML='';
   for(const tl of tiles){const b=document.createElement('button');b.className='tile';
@@ -937,13 +1014,13 @@ function openLevels(){
     b.innerHTML='<span class="n"></span><b></b><small></small>';b.querySelector('.n').textContent=lock?'?':n;b.querySelector('b').textContent=cfg.name;
     const sk=SKILLS.find(s=>s.unlock===n&&n>1);
     b.querySelector('small').textContent=lock?`Clear temple ${n-1} first`:save.best[n]?`Best: ${save.best[n]}`:sk?`New skill: ${sk.n}!`:`${cfg.colors} colors · reward ${cfg.reward} coins`;
-    b.onclick=()=>{if(n<=save.unlocked)startLevel(n)};grid.appendChild(b)}
+    b.onclick=()=>{if(n<=save.unlocked)openPrep(n)};grid.appendChild(b)}
   show('levels');
 }
 function endLevel(win){
   const n=G.n,endless=G.endless;
   let reward=0,first=false;const before=save.unlocked;
-  if(win){first=!save.cleared[n];reward=Math.round(G.cfg.reward*(first?2:1)*coinBonus());save.cleared[n]=1;save.stats.wins++;save.unlocked=Math.max(save.unlocked,Math.min(LEVELS,n+1)+(n>=LEVELS?1:0))}
+  if(win){first=!save.cleared[n];reward=Math.round(G.cfg.reward*(first?2:1)*coinBonus());save.cleared[n]=1;save.stats.wins++;if(G.lives>=G.maxLives)save.stats.perfect=(save.stats.perfect||0)+1;save.unlocked=Math.max(save.unlocked,Math.min(LEVELS,n+1)+(n>=LEVELS?1:0))}
   const lifeBonus=win?G.lives*300:0,total=G.score+lifeBonus,earned=Math.floor(G.coins)+reward;
   save.coins+=earned;save.stats.coins+=earned;
   let newBest=false;
@@ -961,7 +1038,7 @@ function endLevel(win){
   if(endless){add('Play again','gold',()=>startLevel(0,true))}
   else{if(win&&n<LEVELS)add('Next temple','gold',()=>startLevel(n+1));add(win?'Replay':'Try again',win?'alt':'',()=>startLevel(n))}
   add('Camp','alt',openCamp);add('Menu','alt',openHub);
-  G.state='done';hideHud();show('end');
+  G.state='done';hideHud();show('end');checkAch();
 }
 function togglePause(){if(!G||G.state!=='play')return;paused=!paused;show(paused?'pause':null)}
 $('#playBtn').onclick=openHub;$('#hPause').onclick=togglePause;$('#resumeBtn').onclick=togglePause;
@@ -976,6 +1053,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden&&G&&G.state
 // camp, tasks, daily
 function pipBar(n,max){return`<div class="pips">${Array.from({length:max},(_,i)=>`<i class="${i<n?'f':''}"></i>`).join('')}</div>`}
 function openCamp(){
+  G=null;paused=false;hideHud();
   $('#campBonus').textContent=`Camp bonus: +${Math.round((coinBonus()-1)*100)}% coins. Every building level adds 4%.`;
   const list=$('#campList');list.innerHTML='';
   for(const f of CAMP){const lv=save.camp[f.k],max=lv>=3,cost=CAMP_COST[lv],req=CAMP_REQ[lv],blocked=!max&&cleared()<req;
@@ -998,7 +1076,7 @@ function upgradeCamp(k){
   const cx=f.hs[0]+f.hs[2]/2,cy=f.hs[1]+f.hs[3]/2;
   for(let i=0;i<28;i++){const a=rnd(0,TAU),v=rnd(30,130);campFx.push({x:cx,y:cy,vx:Math.cos(a)*v,vy:Math.sin(a)*v-40,t:0,life:rnd(.6,1.2),r:rnd(2,5),dust:i<10})}
   campFx.push({txt:`LEVEL ${save.camp[k]}!`,x:cx,y:f.hs[1]+10,t:0,life:1.5});
-  openCamp();if(sheetOpen)openSheet(k);
+  openCamp();if(sheetOpen)openSheet(k);checkAch();
 }
 function openSheet(k){
   const f=CAMP.find(x=>x.k===k),s=campState(f);$('#csName').textContent=f.n;$('#csDesc').textContent=f.d;$('#csPips').innerHTML=pipBar(s.lv,3);
@@ -1044,6 +1122,89 @@ function openDaily(msg){
 }
 $('#dailyClaim').onclick=()=>{if(!dailyReady())return;const day=nextDay(),v=DAILY[day-1];save.daily.streak=day;save.daily.last=dayKey(new Date());save.coins+=v;persist();SFX.play('win');openDaily(`You found ${v} coins!`)};
 $('#dailyBack').onclick=openHub;
+
+// ---------- boosters: picked on the ready screen before a run ----------
+const BOOSTS=[
+  {k:'heart',n:'Extra Heart',d:'+1 heart for this run',cost:120,ic:'♥',col:'#e3202e'},
+  {k:'energy',n:'Full Power',d:'Start with every skill fully charged',cost:150,ic:'✦',col:'#1fae94'},
+  {k:'slow',n:'Slow Start',d:'Gems roll 40% slower for the first 25 seconds',cost:100,ic:'≈',col:'#1a74e8'},
+  {k:'lucky',n:'Lucky Gems',d:'Twice as many power-up gems',cost:120,ic:'★',col:'#8a33e8'}];
+let prepSel=new Set(),prepTarget=null;
+function openPrep(n,endless=false){
+  G=null;paused=false;hideHud();prepTarget={n,endless};prepSel=new Set();
+  $('#prepTitle').textContent=endless?'Endless Jungle':levelCfg(n).name;
+  $('#prepSub').textContent=endless?'One heart. The chain never stops and keeps speeding up.':`Temple ${n} · ${levelCfg(n).colors} colors`;
+  renderPrep();show('prep');
+}
+function renderPrep(){
+  const list=$('#boostList');list.innerHTML='';let total=0;
+  for(const b of BOOSTS){const on=prepSel.has(b.k);if(on)total+=b.cost;const el=document.createElement('button');el.className='boost'+(on?' on':'');
+    el.innerHTML=`<span class="ic" style="background:${b.col}">${b.ic}</span><span><b></b><span class="d"></span></span><span class="pr">${on?'✓ ':''}<span class="coin"></span>${b.cost}</span>`;
+    el.querySelector('b').textContent=b.n;el.querySelector('.d').textContent=b.d;
+    el.onclick=()=>{if(prepSel.has(b.k))prepSel.delete(b.k);else prepSel.add(b.k);SFX.play('click');renderPrep()};list.appendChild(el)}
+  const go=$('#prepGo');go.innerHTML=total?`Start · <span class="coin" style="width:22px;height:22px;vertical-align:-3px"></span> ${total}`:'Start';go.disabled=total>save.coins;
+}
+$('#prepGo').onclick=()=>{let total=0;const boost={};for(const k of prepSel){total+=BOOSTS.find(b=>b.k===k).cost;boost[k]=true}
+  if(total>save.coins)return;save.coins-=total;persist();startLevel(prepTarget.n,prepTarget.endless,boost)};
+$('#prepBack').onclick=()=>prepTarget&&prepTarget.endless?openHub():openLevels();
+
+// ---------- trophies ----------
+const ACH=[
+  {id:'first',n:'First Steps',d:'Clear your first temple',goal:1,val:()=>cleared(),r:100},
+  {id:'t10',n:'Temple Explorer',d:'Clear 10 temples',goal:10,val:()=>cleared(),r:300},
+  {id:'t25',n:'Temple Master',d:'Clear 25 temples',goal:25,val:()=>cleared(),r:800},
+  {id:'t50',n:'Legend of the Jungle',d:'Clear all 50 temples',goal:50,val:()=>cleared(),r:2500},
+  {id:'g500',n:'Gem Popper',d:'Pop 500 gems',goal:500,val:()=>save.stats.gems,r:150},
+  {id:'g5k',n:'Gem Crusher',d:'Pop 5,000 gems',goal:5000,val:()=>save.stats.gems,r:800},
+  {id:'c3',n:'Chain Reaction',d:'Make a ×3 combo',goal:3,val:()=>save.stats.maxCombo||0,r:150},
+  {id:'c5',n:'Combo King',d:'Make a ×5 combo',goal:5,val:()=>save.stats.maxCombo||0,r:500},
+  {id:'perfect',n:'Flawless',d:'Clear a temple without losing a heart',goal:1,val:()=>save.stats.perfect||0,r:200},
+  {id:'skills',n:'Skilled Pup',d:'Use skills 25 times',goal:25,val:()=>save.stats.skills,r:250},
+  {id:'powers',n:'Power Hungry',d:'Pop 20 power-up gems',goal:20,val:()=>save.stats.powers,r:250},
+  {id:'endless',n:'Endless Hero',d:'Score 5,000 in Endless',goal:5000,val:()=>save.bestEndless,r:400},
+  {id:'camp6',n:'Camp Builder',d:'Reach camp level 6',goal:6,val:()=>campLv(),r:250},
+  {id:'camp18',n:'Village Chief',d:'Fully build your camp',goal:18,val:()=>campLv(),r:1000},
+  {id:'style',n:'Fashion Pup',d:'Own 7 Biscuit styles',goal:7,val:()=>save.styles.length,r:300},
+  {id:'rich',n:'Treasure Hunter',d:'Earn 10,000 coins',goal:10000,val:()=>save.stats.coins,r:600}];
+function checkAch(){
+  const got=[];for(const a of ACH){if(save.ach.includes(a.id))continue;if(a.val()>=a.goal){save.ach.push(a.id);save.coins+=a.r;got.push(a)}}
+  if(!got.length)return;persist();wallet();SFX.play('win');
+  got.slice(0,3).forEach((a,i)=>setTimeout(()=>note('Trophy: '+a.n,`+${a.r} coins`),i*400));
+  if(got.length>3)setTimeout(()=>note(`+${got.length-3} more trophies!`,'See them in Trophies'),1200);
+}
+function openTrophies(){
+  checkAch();$('#trophyCount').textContent=`${save.ach.length} / ${ACH.length}`;
+  const list=$('#trophyList');list.innerHTML='';
+  for(const a of ACH){const got=save.ach.includes(a.id),v=Math.min(a.goal,Math.floor(a.val()));
+    const row=document.createElement('div');row.className='item';
+    row.innerHTML=`<div style="min-width:0;display:flex;flex-direction:column;gap:6px"><h3></h3><div class="d"></div>${got?'':`<div class="bar"><i style="width:${v/a.goal*100}%"></i></div><div class="d">${v.toLocaleString()} / ${a.goal.toLocaleString()}</div>`}</div>
+      ${got?'<span class="trophy-ok">✓ Earned</span>':`<span class="coins" style="font-size:20px"><span class="coin" style="width:18px;height:18px"></span>${a.r}</span>`}`;
+    row.querySelector('h3').textContent=(got?'★ ':'')+a.n;row.querySelector('.d').textContent=a.d;list.appendChild(row)}
+  show('trophies');
+}
+
+// ---------- customize Biscuit ----------
+function openStyle(){
+  const box=$('#styleList');box.innerHTML='';
+  const section=(title,items,slot,swatch)=>{const h=document.createElement('h3');h.style.fontSize='22px';h.textContent=title;box.appendChild(h);
+    const grid=document.createElement('div');grid.className='chips';
+    for(const it of items){const owned=save.styles.includes(it.id),on=save.skin[slot]===it.id,b=document.createElement('button');b.className='chip'+(on?' on':'');
+      b.innerHTML=`<span class="sw" style="${swatch(it)}"></span><span></span><small>${on?'Wearing':owned?'Tap to wear':`<span class="coin"></span>${it.cost}`}</small>`;
+      b.children[1].textContent=it.n;
+      b.onclick=()=>{if(owned){save.skin[slot]=it.id;persist();SFX.play('swap');openStyle();return}
+        if(save.coins<it.cost){note('Not enough coins',`You need ${it.cost-Math.floor(save.coins)} more`);return}
+        save.coins-=it.cost;save.styles.push(it.id);save.skin[slot]=it.id;persist();SFX.play('coin');note(`${it.n} unlocked!`,'Biscuit looks great');checkAch();openStyle()};
+      grid.appendChild(b)}box.appendChild(grid)};
+  section('Fur',FURS,'fur',f=>`background:${f.spots?'radial-gradient(circle at 30% 35%,#1e1e24 0 4px,transparent 5px),radial-gradient(circle at 68% 60%,#1e1e24 0 5px,transparent 6px),':''}linear-gradient(135deg,${f.fur[0]},${f.fur[1]})`);
+  section('Armor',ARMORS,'armor',a=>`background:linear-gradient(135deg,${a.c[0]},${a.c[1]})`);
+  section('Headgear',HATS,'hat',h=>`background:${h.id==='crown'?'linear-gradient(#fff1a8,#c98f10)':h.id==='feathers'?'conic-gradient(#ff4f5e,#ffcf4a,#36c862,#3fa1ff,#b06bff,#ff4f5e)':h.id==='band'?'linear-gradient(#f5c542,#b8820e)':'#d9c7a6'}`);
+  show('style');
+}
+function stylePreview(c,w,h,t){
+  c.fillStyle=lg(c,0,0,0,h,['#2f6d52','#123222']);c.fillRect(0,0,w,h);glow(c,w/2,h/2,h*.6,'255,220,140',.35);
+  const s=h/170;c.save();c.translate(w/2,h/2);c.scale(s,s);stoneDisc(c,70);drawFire(c,-92,12,t,.9);drawFire(c,92,12,t+1,.9);
+  c.scale(1.1,1.1);drawHero(c,t,{aim:-Math.PI/2+Math.sin(t*.8)*1.2,cur:Math.floor(t)%6,nxt:(Math.floor(t)+2)%6,blink:(t%3.6)<.12},s*1.1*DPR);c.restore();
+}
 
 // ---------- Jungle Camp scene (640x360). The still parts are drawn once into a cache; only moving bits redraw each frame. ----------
 let campBuildT=0,campFx=[],campLT=0;
@@ -1119,7 +1280,16 @@ function campStatic(c){
     if(C.tower===1){for(let i=0;i<3;i++)circ(c,479,282-i*18,10,['#c62839','#2a8f5a','#ffcf4a'][i],true,2)}
     else{rr(c,446,300-h-10,66,10,2,'#b07a43');poly(c,[442,300-h-10,516,300-h-10,479,300-h-42],'#6b3f1d');
       c.save();c.translate(512,300-h+18);circ(c,0,0,8,'#8a5a30',true,1.5);circ(c,0,-11,6,'#8a5a30',true,1.5);ell(c,1,-10,4,3,'#e8c690',false);circ(c,-1,-12,1,INK,false);circ(c,3,-12,1,INK,false);c.restore()}}
+  // empty building spots get a clear construction plot so you can see where to build
+  for(const f of CAMP)if(!C[f.k]&&f.k!=='bridge')buildPlot(c,f.hs[0]+f.hs[2]/2,f.hs[1]+f.hs[3]-16);
   for(let k=0;k<4;k++){leaf(c,-10,370,90-k*8,-.9+k*.3,'#2f7a35','#0f3518');leaf(c,650,370,90-k*8,Math.PI+.9-k*.3,'#2f7a35','#0f3518')}
+}
+function buildPlot(c,x,y){
+  ell(c,x,y,44,13,'#b88a52',true,0,2.5);ell(c,x,y-2,36,9,'#c99a60',false);
+  for(const[px,py] of[[-38,-4],[38,-4],[-26,8],[26,8]]){rr(c,x+px-3,y+py-22,6,24,1.5,'#8a5a30',true,1.5);poly(c,[x+px-3,y+py-22,x+px+3,y+py-22,x+px,y+py-28],'#8a5a30',true,1.5)}
+  c.beginPath();c.moveTo(x-38,y-20);c.quadraticCurveTo(x-13,y-8,x-26,y-6);c.moveTo(x+38,y-20);c.quadraticCurveTo(x+13,y-8,x+26,y-6);c.moveTo(x-38,y-20);c.quadraticCurveTo(x,y-14,x+38,y-20);c.lineWidth=2*LWK;c.strokeStyle='#f2d38a';c.stroke();
+  rr(c,x-15,y-34,30,20,4,'#f5c542',true,2);line(c,x,y-14,x,y-4,3,'#6b4a2a');
+  c.save();c.translate(x,y-24);c.rotate(-.6);rr(c,-1.5,-6,3,12,1,'#6b4a2a',false);rr(c,-6,-8,12,5,1.5,'#5a6670',false);c.restore();
 }
 function campAnim(c,t,P){
   const C=save.camp;
@@ -1135,7 +1305,7 @@ function campAnim(c,t,P){
     c.save();c.translate(mx,my+b);
     if(s.afford){glow(c,0,0,30,'120,255,140',.7);circ(c,0,0,15,'#36c862',true,2.5);poly(c,[0,-9,8,1,3,1,3,9,-3,9,-3,1,-8,1],'#fff',true,1.5)}
     else if(s.blocked){circ(c,0,0,14,'#6f746a',true,2.5);rr(c,-5.5,-2,11,9,1.5,'#fff',false);c.beginPath();c.arc(0,-3,4,Math.PI,0);c.lineWidth=2.4;c.strokeStyle='#fff';c.stroke()}
-    else{rr(c,-27,-12,54,24,12,'rgba(43,29,16,.9)',true,2);circ(c,-14,0,7,'#ffc531',true,1.5);c.font='15px "Lilita One","Arial Black",sans-serif';c.fillStyle='#ffcf4a';c.textAlign='left';c.textBaseline='middle';c.fillText(String(s.cost),-4,1)}
+    else{c.globalAlpha=.85;circ(c,0,0,12,'#fff7e3',true,2.5);c.save();c.rotate(-.6);rr(c,-1.5,-6,3,12,1,'#8a5a30',false);rr(c,-6,-8,12,5,1.5,'#6f746a',false);c.restore();c.globalAlpha=1}
     c.restore()}
   for(const p of campFx){p.t+=cdt;const k=p.t/p.life;
     if(p.txt){c.globalAlpha=Math.max(0,1-k);txt(c,p.txt,p.x,p.y-k*34,28,'#ffcf4a',6);c.globalAlpha=1;continue}
@@ -1189,13 +1359,13 @@ function hubScene(c,w,h,t){
   for(let i=0;i<6;i++){const x=w*.08+((i*w*.17+t*20)%(w*.84));drawGem(c,x,h*.26+Math.sin(t+i)*10,13,i%6,null,t,t*3,false)}
 }
 const hubBg={cv:document.createElement('canvas'),w:0,h:0};
-addArt($('#titleArt'),heroScene);addArt($('#hubArt'),hubScene);addArt($('#campArt'),drawCamp);
+addArt($('#titleArt'),heroScene);addArt($('#hubArt'),hubScene);addArt($('#campArt'),drawCamp);addArt($('#styleArt'),stylePreview);
 function drawArts(t){for(const a of arts){if(!a.el.offsetParent)continue;if(!a.w){sizeArt(a);if(!a.w)continue}const c=a.c.getContext('2d');c.setTransform(DPR,0,0,DPR,0,0);c.clearRect(0,0,a.w,a.h);a.fn(c,a.w,a.h,t)}}
 
 // ---------- loop ----------
 let last=performance.now();
 function frame(now){const dt=Math.min(.033,(now-last)/1000);last=now;const t=now/1000;campBuildT=Math.max(0,campBuildT-dt);
-  try{if(G&&!paused)update(dt);render(t,dt);updHud();if(!G)drawArts(t)}catch(e){if(!frame.warned){frame.warned=true;console.error(e);reportErr(e,'frame')}}
+  try{if(G&&!paused)update(dt);render(t,dt);updHud();if(!G||G.state==='done')drawArts(t)}catch(e){if(!frame.warned){frame.warned=true;console.error(e);reportErr(e,'frame')}}
   requestAnimationFrame(frame)}
 addEventListener('resize',resize);resize();ensureTasks();requestAnimationFrame(frame);
 })();
