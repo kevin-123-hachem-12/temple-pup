@@ -84,6 +84,49 @@ p{margin:0}
 .lvl .n{font-family:var(--display);font-size:32px;line-height:1}
 .lvl b{font-weight:900;font-size:16px}
 .lvl small{font-weight:800;font-size:13px;color:#6b5636}
+#levels .wrap{max-width:560px}
+.mstar{color:var(--gold)}
+.map{display:flex;flex-direction:column;gap:18px;padding-bottom:20px}
+.chap{position:relative;border:4px solid var(--ink);border-radius:22px;overflow:hidden;box-shadow:0 6px 0 var(--ink),inset 0 0 0 3px rgba(255,255,255,.12)}
+.chap-h{position:relative;z-index:3;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;background:rgba(0,0,0,.38);border-bottom:3px solid rgba(0,0,0,.4)}
+.chap-h small{display:block;font-weight:900;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.chap-h b{font-family:var(--display);font-weight:400;font-size:clamp(22px,6.5vw,30px);color:#fff;-webkit-text-stroke:3px var(--ink);paint-order:stroke fill;text-shadow:0 3px 0 var(--ink)}
+.cstars{font-family:var(--display);font-size:20px;color:var(--gold);-webkit-text-stroke:3px var(--ink);paint-order:stroke fill;white-space:nowrap}
+.chap-path{position:relative}
+.chap-path svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ch-jungle{background:radial-gradient(ellipse at 30% 20%,rgba(140,230,150,.35),transparent 55%),radial-gradient(ellipse at 80% 80%,rgba(255,210,120,.2),transparent 50%),linear-gradient(#2f6d52,#123222)}
+.ch-sewer{background:radial-gradient(ellipse at 70% 15%,rgba(120,255,90,.3),transparent 50%),radial-gradient(ellipse at 20% 75%,rgba(80,255,140,.18),transparent 45%),repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 2px,transparent 2px 60px),linear-gradient(#1f2a3a,#0a1410)}
+.ch-ice{background:radial-gradient(ellipse at 30% 20%,rgba(255,255,255,.55),transparent 55%),radial-gradient(ellipse at 75% 80%,rgba(150,220,255,.4),transparent 50%),linear-gradient(#8fcff5,#2d5f9a)}
+.ch-volcano{background:radial-gradient(ellipse at 50% 100%,rgba(255,120,30,.55),transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(255,80,40,.25),transparent 45%),linear-gradient(#4a160a,#1a0603)}
+.ch-moon{background:radial-gradient(circle at 78% 12%,rgba(255,250,220,.55),transparent 18%),radial-gradient(ellipse at 25% 70%,rgba(170,120,255,.3),transparent 50%),linear-gradient(#3a2a5c,#100a20)}
+.node{position:absolute;z-index:2;transform:translate(-50%,-50%);width:60px;height:60px;padding:0;border-radius:50%;border:4px solid var(--ink);display:grid;place-items:center;cursor:pointer;
+  font-family:var(--display);font-size:25px;color:var(--ink);background:radial-gradient(circle at 35% 30%,#fff6c8,#f5c542 55%,#b8820e);box-shadow:0 5px 0 var(--ink),inset 0 -5px 0 rgba(0,0,0,.18)}
+.node:active{transform:translate(-50%,-46%)}
+.node.done{background:radial-gradient(circle at 35% 30%,#c8fff0,#2fd0b0 55%,#0b6e62);color:#fff;-webkit-text-stroke:3px var(--ink);paint-order:stroke fill}
+.node.locked{background:radial-gradient(circle at 35% 30%,#a8a49a,#6e6a62);color:#3a3630;cursor:not-allowed;box-shadow:0 4px 0 var(--ink)}
+.node.cur{animation:nodePulse 1.4s ease-in-out infinite}
+@keyframes nodePulse{50%{box-shadow:0 5px 0 var(--ink),0 0 0 9px rgba(255,220,100,.45),0 0 30px rgba(255,220,100,.8)}}
+.node.boss{width:84px;height:84px;font-size:15px;background:radial-gradient(circle at 35% 30%,#ffb0a0,#e3202e 55%,#5a0810);color:#fff}
+.node.boss.done{background:radial-gradient(circle at 35% 30%,#fff6c8,#f5c542 55%,#b8820e);color:var(--ink)}
+.node.boss.locked{background:radial-gradient(circle at 35% 30%,#a8a49a,#6e6a62);color:#3a3630}
+.node.boss svg{width:38px;height:38px}
+.node .st{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:2px;font-size:17px;letter-spacing:-2px;white-space:nowrap;color:var(--gold);-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;font-family:var(--display)}
+.node .st i{font-style:normal;color:rgba(255,255,255,.35)}
+.node .rb{position:absolute;right:-12px;top:-10px;width:28px;height:28px;border-radius:50%;background:#fff7e3;border:3px solid var(--ink);display:grid;place-items:center}
+.node .rb svg{width:17px;height:17px}
+.gate{position:absolute;z-index:4;left:50%;top:50%;transform:translate(-50%,-50%);width:min(320px,86%);text-align:center;color:var(--ink);background:var(--stone);border:4px solid var(--ink);border-radius:18px;padding:16px;box-shadow:0 6px 0 var(--ink),inset 0 0 0 3px var(--gold2);display:flex;flex-direction:column;gap:6px;font-weight:800}
+.gate b{font-family:var(--display);font-weight:400;font-size:26px}
+.chap.locked .chap-path>:not(.gate){filter:grayscale(.75) brightness(.55)}
+#prepGoals{display:flex;flex-direction:column;gap:6px;text-align:left;font-weight:800}
+#prepGoals .rule{display:flex;gap:10px;align-items:center;background:#fff7e3;border:3px solid var(--ink);border-radius:14px;padding:8px 12px}
+#prepGoals .rule svg{width:26px;height:26px;flex:none}
+#prepGoals .g{display:flex;gap:8px;align-items:center}
+#prepGoals .g:before{content:'★';font-family:var(--display);color:var(--gold);-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;font-size:20px}
+.bigstars{display:flex;justify-content:center;gap:6px;min-height:0}
+.bigstars span{font-family:var(--display);font-size:clamp(46px,13vw,64px);line-height:1;color:rgba(0,0,0,.18);-webkit-text-stroke:4px var(--ink);paint-order:stroke fill}
+.bigstars span.on{color:var(--gold);text-shadow:0 0 18px rgba(255,200,60,.9);animation:starIn .5s cubic-bezier(.2,1.6,.4,1) backwards}
+.bigstars span:nth-child(2){transform:translateY(-10px)}
+@keyframes starIn{from{transform:scale(0) rotate(-90deg);opacity:0}}
 .lvl.locked{opacity:.5;cursor:not-allowed;filter:grayscale(.6)}
 .lvl.done{box-shadow:0 5px 0 var(--ink),inset 0 0 0 3px var(--gold2)}
 
@@ -223,9 +266,8 @@ p{margin:0}
 
 <section class="screen full" id="levels">
   <div class="wrap">
-    <div class="row between"><h1 class="h1">Adventure</h1><button class="btn alt back">Back</button></div>
-    <p class="lead" style="text-align:left">Clear a temple to unlock the next one and new skills. The second round of six is faster with more colors.</p>
-    <div class="levels" id="lvlGrid"></div>
+    <div class="row between"><h1 class="h1">World Map</h1><div class="row"><span class="coins"><span class="mstar">★</span><span id="mapStars">0</span></span><button class="btn alt back">Back</button></div></div>
+    <div id="lvlGrid" class="map"></div>
   </div>
 </section>
 
@@ -272,6 +314,7 @@ p{margin:0}
   <div class="tablet" style="width:min(520px,100%)">
     <h1 style="font-size:clamp(30px,8vw,42px)" id="prepTitle">Temple 1</h1>
     <p style="font-weight:800" id="prepSub"></p>
+    <div id="prepGoals"></div>
     <h3 style="font-size:20px;text-align:left">Boosters for this run</h3>
     <div class="boosts" id="boostList"></div>
     <div class="row"><button class="btn gold big" id="prepGo">Start</button><button class="btn alt" id="prepBack">Back</button></div>
@@ -329,6 +372,7 @@ p{margin:0}
   <div class="tablet">
     <span class="coins" style="align-self:center"><span class="coin"></span><span class="cCoins">0</span></span>
     <h1 style="font-size:clamp(34px,9vw,50px)" id="endTitle">Temple cleared!</h1>
+    <div class="bigstars" id="endStars"></div>
     <div class="tally" id="endTally"></div>
     <div class="row" id="endBtns"></div>
   </div>
@@ -357,9 +401,12 @@ if(!CanvasRenderingContext2D.prototype.roundRect){CanvasRenderingContext2D.proto
 const KEY='templepup_v1';
 const fresh=()=>({unlocked:1,best:{},muted:false,music:true,coins:0,bestEndless:0,camp:{tree:0,falls:0,idol:0,bridge:0,garden:0,tower:0},
   stats:{gems:0,combos:0,wins:0,powers:0,coins:0,skills:0,maxCombo:0,perfect:0},tasks:[],taskTier:0,daily:{last:'',streak:0},cleared:{},
-  ach:[],skin:{fur:'golden',armor:'jade',hat:'band'},styles:['golden','jade','band','none']});
+  ach:[],skin:{fur:'golden',armor:'jade',hat:'band'},styles:['golden','jade','band','none'],stars:{},ver:2});
 function tidySave(s){
-  s=Object.assign(fresh(),s);
+  const old=!s.ver;s=Object.assign(fresh(),s);
+  if(!s.stars||typeof s.stars!=='object')s.stars={};
+  // saves from before chapters: every temple already cleared counts as 2 stars, so earlier players keep their place
+  if(old){for(let i=1;i<Math.min(s.unlocked||1,76);i++)s.stars[i]=Math.max(s.stars[i]||0,2);s.ver=2}
   s.camp=Object.assign(fresh().camp,s.camp);s.stats=Object.assign(fresh().stats,s.stats);s.daily=Object.assign(fresh().daily,s.daily);
   if(!Array.isArray(s.tasks))s.tasks=[];if(!s.cleared||typeof s.cleared!=='object')s.cleared={};if(!s.best||typeof s.best!=='object')s.best={};
   if(!Array.isArray(s.ach))s.ach=[];if(!Array.isArray(s.styles))s.styles=fresh().styles;s.skin=Object.assign(fresh().skin,s.skin);
@@ -726,11 +773,35 @@ function updStorm(dt){storm.t-=dt;storm.flash=Math.max(0,storm.flash-dt*2.2);sto
   if(storm.t<=0){storm.t=rnd(8,15);storm.flash=.5;const x=rnd(W*.1,W*.9);storm.bolt=bolt(x,-10,x+rnd(-140,140),H*rnd(.35,.7),70);storm.boltA=1;setTimeout(()=>SFX.play('thunder',1),300)}}
 
 // ---------- levels, camp, tasks, skills ----------
-const LEVELS=50;
+// 5 chapters of 15 levels. Level 15 of each chapter is the boss temple.
+const PER=15,LEVELS=75,GATE=[0,20,50,85,125];
+const CHAPTERS=[
+  {id:'jungle',n:'Jungle Temple',boss:'Stone Jaguar',path:'#ffe7a8',names:['Spiral Steps','Snake River','Heart Shrine','Square Maze','Waterfall Steps','Whirlpool']},
+  {id:'sewer',n:'Neon Sewer City',boss:'King Rat Mech',path:'#9dff6a',names:['Drain Spiral','Rat Run','Sludge Heart','Pipe Maze','Overflow Steps','Sewer Whirl']},
+  {id:'ice',n:'Frozen Ice Temple',boss:'Frost Serpent',path:'#ffffff',names:['Frost Spiral','Glacier Run','Frozen Heart','Ice Maze','Snowfall Steps','Blizzard Eye']},
+  {id:'volcano',n:'Volcano Forge',boss:'Magma Golem',path:'#ffb35a',names:['Lava Spiral','Ember Run','Molten Heart','Forge Maze','Ashfall Steps','Magma Whirl']},
+  {id:'moon',n:'Haunted Moon Ruins',boss:'Moon Wraith',path:'#d8c4ff',names:['Ghost Spiral','Moonlit Run','Haunted Heart','Crypt Maze','Spirit Steps','Wraith Whirl']}];
+// special rules, introduced a few at a time: chapter 1, chapter 2, then chapters 3-5
+const RULES_AT=[{5:'shots',9:'time',13:'dark'},{3:'shots',6:'reverse',9:'time',12:'dark'},{3:'time',5:'reverse',8:'shots',11:'dark',13:'reverse'}];
+const RULES={
+  shots:{n:'Limited shots',ic:'target',d:c=>`Clear the temple with only ${shotLimit(c)} shots.`},
+  time:{n:'Time attack',ic:'clock',d:c=>`Clear the temple within ${timeLimit(c)} seconds.`},
+  dark:{n:'Darkness',ic:'moon',d:()=>'Only the area around Biscuit is lit. Lightning shows the rest.'},
+  reverse:{n:'Reverse run',ic:'rev',d:()=>'The gems roll in from the other end of the track.'}};
+const shotLimit=c=>Math.round(c.count*.62)+12,timeLimit=c=>Math.round(50+c.count*.75),parShots=c=>Math.round(c.count*.5)+6;
+const chOf=n=>Math.floor((n-1)/PER);
+const starsIn=c=>{let t=0;for(let i=c*PER+1;i<=(c+1)*PER;i++)t+=save.stars[i]||0;return t};
+const starsBefore=c=>{let t=0;for(let k=0;k<c;k++)t+=starsIn(k);return t};
+const totalStars=()=>starsBefore(CHAPTERS.length);
+const gateOk=c=>c===0||(save.unlocked>c*PER&&starsBefore(c)>=GATE[c]);
+const canPlay=n=>n>=1&&n<=LEVELS&&n<=save.unlocked&&gateOk(chOf(n));
 // 50 temples: the six track shapes repeat in rounds, mirrored every other round, each round faster with more gems.
-function levelCfg(n){const round=Math.floor((n-1)/6),ti=(n-1)%6;return{ti,track:TRACKS[ti],flip:round%2===1,stone:(ti+round)%6,
-  name:TRACKS[ti].name+(round?' '+['','II','III','IV','V','VI','VII','VIII','IX'][round]:''),
-  colors:Math.min(6,4+(n>=3?1:0)+(n>=8?1:0)),count:Math.round(44+n*3.5),speed:32+n*1.1+round*3,reward:60+n*12}}
+function levelCfg(n){
+  const c=chOf(n),li=(n-1)%PER+1,ti=(li-1)%6,round=Math.floor((li-1)/6),e=n*.68,boss=li===PER,rule=boss?null:(RULES_AT[Math.min(c,2)][li]||null);
+  const ruleK=rule==='shots'||rule==='time'?.85:1;
+  return{c,li,ti,track:TRACKS[ti],flip:(round+c)%2===1,stone:(ti+round+c)%6,rule,boss,
+    name:boss?`${CHAPTERS[c].boss}'s Lair`:CHAPTERS[c].names[ti]+(round?' '+['','II','III'][round]:''),
+    colors:Math.min(6,4+(n>=3?1:0)+(n>=8?1:0)),count:Math.round((44+e*3.5)*(boss?1.25:ruleK)),speed:32+e*1.1+c*2.5+(boss?3:0),reward:60+Math.round(e*12)+(boss?150:0)}}
 const CAMP=[
   {k:'tree',n:'Treehouse',d:'Biscuit’s home in the giant fig tree.',hs:[36,96,160,210],m:[110,92]},
   {k:'falls',n:'Waterfall Pool',d:'Bring the dry falls back to life.',hs:[496,86,144,180],m:[578,76]},
@@ -765,6 +836,11 @@ const ICON={
   trophy:'<svg viewBox="0 0 24 24"><path d="M7 3h10v5a5 5 0 0 1-10 0zM7 5H4a3 3 0 0 0 3 5M17 5h3a3 3 0 0 1-3 5M12 13v4M8 21h8l-1-4H9z" fill="#fff1a8" stroke="#2b1d10" stroke-width="1.7" stroke-linejoin="round"/></svg>',
   paw:'<svg viewBox="0 0 24 24" fill="#fff" stroke="#2b1d10" stroke-width="1.5"><ellipse cx="12" cy="16" rx="5.5" ry="4.5"/><circle cx="6" cy="10" r="2.3"/><circle cx="10" cy="6.5" r="2.3"/><circle cx="14" cy="6.5" r="2.3"/><circle cx="18" cy="10" r="2.3"/></svg>',
   save:'<svg viewBox="0 0 24 24"><path d="M4 4h13l3 3v13H4z" fill="#fff" stroke="#2b1d10" stroke-width="1.7" stroke-linejoin="round"/><path d="M7 4h9v5H7zM7 14h10v6H7z" fill="#bfe8ff" stroke="#2b1d10" stroke-width="1.5"/></svg>',
+  target:'<svg viewBox="0 0 24 24" fill="none" stroke="#2b1d10" stroke-width="2.4"><circle cx="12" cy="12" r="9" fill="#ff6a5a"/><circle cx="12" cy="12" r="5" fill="#fff"/><circle cx="12" cy="12" r="1.8" fill="#2b1d10"/></svg>',
+  clock:'<svg viewBox="0 0 24 24" fill="none" stroke="#2b1d10" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="13" r="8.5" fill="#7ce0ff"/><path d="M12 8.5V13l3 2M9.5 2.5h5"/></svg>',
+  moon:'<svg viewBox="0 0 24 24"><path d="M15 3a9 9 0 1 0 6 13A7.5 7.5 0 0 1 15 3z" fill="#6b5cff" stroke="#2b1d10" stroke-width="2.2" stroke-linejoin="round"/></svg>',
+  rev:'<svg viewBox="0 0 24 24" fill="none" stroke="#2b1d10" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 8H6l4-4M4 16h14l-4 4"/></svg>',
+  skull:'<svg viewBox="0 0 24 24"><path d="M12 2C7 2 3.5 5.5 3.5 10c0 2.8 1.4 4.6 3 5.6V19h3v-2h1v2h3v-2h1v2h3v-3.4c1.6-1 3-2.8 3-5.6C20.5 5.5 17 2 12 2z" fill="#fff7e3" stroke="#2b1d10" stroke-width="1.8" stroke-linejoin="round"/><circle cx="8.6" cy="10.5" r="2.3" fill="#2b1d10"/><circle cx="15.4" cy="10.5" r="2.3" fill="#2b1d10"/></svg>',
   check:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>',
   gift:'<svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="2" fill="#fff" stroke="#2b1d10" stroke-width="1.6"/><path d="M12 9v12M3 13h18" stroke="#2b1d10" stroke-width="1.6"/><path d="M12 9c-2-4-6-4-6-1s4 1 6 1c2 0 6 2 6-1s-4-3-6 1z" fill="#fff" stroke="#2b1d10" stroke-width="1.6"/></svg>'
 };
@@ -794,18 +870,21 @@ function startLevel(n,endless=false,boost={}){
   paused=false;show(null);$('#hud').classList.add('on');$('#skills').classList.add('on');buildSkills();
   chooseBoard();fit();const sx=BW/800,sy=BH/800;
   const fx=x=>cfg.flip?800-x:x;
-  const P=makePath(cfg.track.pts().map(([x,y])=>[fx(x)*sx,y*sy])),dog=[fx(cfg.track.dog[0])*sx,cfg.track.dog[1]*sy];
+  const raw=cfg.track.pts().map(([x,y])=>[fx(x)*sx,y*sy]);if(cfg.rule==='reverse')raw.reverse();
+  const P=makePath(raw),dog=[fx(cfg.track.dog[0])*sx,cfg.track.dog[1]*sy];
   const lives=(endless?1:3+(save.camp.idol>=3?1:0))+(boost.heart?1:0);
   G={n,endless,cfg,P,dog,balls:[],shots:[],fx:[],pops:[],bolts:[],score:0,coins:0,banked:0,lives,maxLives:lives,combo:0,aim:-Math.PI/2,cool:0,
      slowT:0,revT:0,aimT:0,iceT:0,energy:boost.energy?100:0,boost,special:null,state:'play',time:0,warnT:0,lastC:-1,run:0,stateT:0,recoil:0,shake:0,flash:0,freeze:0,zoom:0,beat:-9,
+     rule:endless?null:cfg.rule,shotsMax:endless?0:shotLimit(cfg),timeMax:endless?0:timeLimit(cfg),par:endless?0:parShots(cfg),shotsUsed:0,shotsLeft:0,timeLeft:0,
      flies:Array.from({length:10},()=>({x:rnd(0,BW),y:rnd(0,BH),p:rnd(0,TAU)}))};
   buildBg(P,dog,cfg.stone??cfg.ti,endless?Date.now()%9999:n);buildJungle();
   resetChain();
   G.cur=Math.floor(Math.random()*cfg.colors);G.nxt=Math.floor(Math.random()*cfg.colors);
-  $('#hLevel').textContent=endless?'ENDLESS':`TEMPLE ${n}`;hudCache={};
-  flash(endless?'Endless Jungle!':cfg.track.name);SFX.setPlaying(true);
+  $('#hLevel').textContent=endless?'ENDLESS':cfg.boss?'BOSS':`LEVEL ${cfg.c+1}-${cfg.li}`;hudCache={};
+  flash(endless?'Endless Jungle!':cfg.name);
+  if(G.rule){const run=G;setTimeout(()=>{if(G===run)banner(RULES[run.rule].n,RULES[run.rule].d(cfg))},1300)}SFX.setPlaying(true);
 }
-function resetChain(){G.balls=[];G.toSpawn=G.cfg.count;G.rush=true;G.slowT=G.revT=G.iceT=0;G.shots=[];G.state='play';G.runT=0}
+function resetChain(){G.shotsUsed=0;G.shotsLeft=G.shotsMax;G.timeLeft=G.timeMax;G.balls=[];G.toSpawn=G.cfg.count;G.rush=true;G.slowT=G.revT=G.iceT=0;G.shots=[];G.state='play';G.runT=0}
 function newColor(){
   const n=G.cfg.colors;let c;
   if(G.lastC>=0&&G.lastC<n&&G.run<3&&Math.random()<.45)c=G.lastC;else{do{c=Math.floor(Math.random()*n)}while(c===G.lastC&&n>1)}
@@ -823,6 +902,8 @@ function fixAmmo(){const p=presentColors();if(!p.includes(G.cur))G.cur=pick(p);i
 function heroGeom(){const[dx,dy]=G.dog,a=G.aim;return{px:dx,py:dy,mx:dx+Math.cos(a)*68*HERO_S,my:dy+Math.sin(a)*68*HERO_S}}
 function shoot(){
   if(!G||G.state!=='play'||paused||G.cool>0)return;
+  if(G.rule==='shots'&&G.shotsLeft<=0)return;
+  G.shotsUsed++;if(G.rule==='shots')G.shotsLeft--;
   const h=heroGeom(),a=G.aim,sp=G.aimT>0?1500:1050;
   const kind=G.special;G.special=null;
   G.shots.push({x:h.mx,y:h.my,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,c:kind==='rainbow'?-1:G.cur,kind,rot:0,trail:[]});
@@ -915,6 +996,8 @@ function update(dt){
   if(G.state==='lose'){for(const b of G.balls){b.s+=900*dt;b.rs=b.s}G.balls=G.balls.filter(b=>b.s<P.L+R);
     if(!G.balls.length){G.stateT-=dt;if(G.stateT<=0){G.lives--;if(G.lives>0){resetChain();flash('Try again!')}else endLevel(false)}}return}
   if(G.state!=='play')return;
+  if(G.rule==='time'&&!G.rush){G.timeLeft-=dt;if(G.timeLeft<=0){G.timeLeft=0;ruleFail("Time's up!");return}}
+  if(G.rule==='shots'&&G.shotsLeft<=0&&!G.shots.length&&G.balls.length){ruleFail('Out of shots!');return}
   if(G.endless){G.cfg.speed=Math.min(120,30+G.time*.45);G.cfg.colors=G.time>100?6:G.time>45?5:4}
   spawn();
   let bs=G.balls;
@@ -947,6 +1030,7 @@ function update(dt){
   if(near>.72&&G.warnT<=0){const k=clamp((near-.72)/.25,0,1);SFX.play('heart',k);if(near>.9)SFX.play('warn');G.beat=G.time;G.warnT=1.05-k*.6}
   if(!G.endless&&!G.toSpawn&&!bs.length&&!G.shots.length){G.state='won';SFX.play('win');SFX.play('bark');flash('Temple cleared!');const run=G;setTimeout(()=>{if(G===run&&G.state==='won')endLevel(true)},1400)}
 }
+function ruleFail(msg){G.state='lose';G.stateT=.8;SFX.play('lose');flash(msg)}
 function hitShot(sh,i,bx,by){
   if(sh.kind==='fire'){const lim=(D*2.7)**2,gone=G.balls.filter(b=>b.rs>=R&&(b.x-sh.x)**2+(b.y-sh.y)**2<lim);
     SFX.play('boom');G.shake=14;G.flash=.25;G.freeze=.08;G.zoom=.05;G.fx.push({k:'ring',x:sh.x,y:sh.y,t:0,life:.6,c:'#ff8a3a',r:140});
@@ -1056,6 +1140,8 @@ function render(t,dt){
     if(b.ins<1){x=b.fx+(x-b.fx)*b.ins;y=b.fy+(y-b.fy)*b.ins}
     const near=P.L-b.rs,r=near<46?R*Math.max(.15,near/46):R;
     drawGem(ctx,x,y,r,b.c,b.pu,t,b.rs/R,true,frozen)}
+  if(G.rule==='dark'){const lit=Math.max(storm.flash,G.flash),g=ctx.createRadialGradient(dx,dy,120,dx,dy,350);
+    g.addColorStop(0,'rgba(2,5,4,0)');g.addColorStop(1,`rgba(2,5,4,${Math.max(0,.87-lit*1.4)})`);ctx.fillStyle=g;ctx.fillRect(0,0,BW,BH)}
   const hg=heroGeom(),a=G.aim;
   if(G.state==='play'){
     if(G.aimT>0||G.special){let x=hg.mx,y=hg.my;const pts=[],lim=(D*.9)**2;
@@ -1093,7 +1179,8 @@ function render(t,dt){
 let hudCache={};
 function setTxt(id,v){if(hudCache[id]!==v){hudCache[id]=v;$(id).textContent=v}}
 function updHud(){if(!G)return;
-  setTxt('#hScore',G.endless?`${G.score} · ${Math.floor(G.coins)} coins`:String(G.score));
+  setTxt('#hScore',G.endless?`${G.score} · ${Math.floor(G.coins)} coins`:G.rule==='shots'?`${G.shotsLeft} shots · ${G.score}`:G.rule==='time'?`${Math.ceil(G.timeLeft)}s · ${G.score}`:String(G.score));
+  const low=(G.rule==='shots'&&G.shotsLeft<8)||(G.rule==='time'&&G.timeLeft<15);if(hudCache.low!==low){hudCache.low=low;$('#hScore').style.color=low?'#ff6a5a':''}
   const want=G.lives+'/'+G.maxLives;if(hudCache.lives!==want){hudCache.lives=want;$('#hLives').innerHTML=Array.from({length:G.maxLives},(_,i)=>i<G.lives?ICON.heart:ICON.heartOff).join('')}
   const pg=G.endless?Math.min(100,G.cfg.speed/120*100):(100-(G.toSpawn/G.cfg.count)*100);const pr=Math.round(pg);if(hudCache.prog!==pr){hudCache.prog=pr;$('#hProg').style.width=pr+'%'}
   updSkills()}
@@ -1145,7 +1232,7 @@ function openHub(){
   if(dailyReady()&&!dailyShown){dailyShown=true;openDaily();return}
   const ready=tasksReady();
   const tiles=[
-    {n:'Adventure',ic:ICON.star,col:'#e8452c',s:`${Math.min(cleared(),LEVELS)} of ${LEVELS} temples cleared`,go:openLevels},
+    {n:'Adventure',ic:ICON.star,col:'#e8452c',s:`${Math.min(cleared(),LEVELS)} of ${LEVELS} temples · ★ ${totalStars()}`,go:openLevels},
     {n:'Endless',ic:ICON.inf,col:'#8a33e8',s:save.bestEndless?`Best score: ${save.bestEndless}`:'How long can you last?',go:()=>openPrep(0,true)},
     {n:'Jungle Camp',ic:ICON.hut,col:'#1fae94',s:`Camp level ${campLv()} · +${Math.round((coinBonus()-1)*100)}% coins`,go:openCamp},
     {n:'Tasks',ic:ICON.check,col:'#1a74e8',s:ready?`${ready} ready to claim!`:'Earn coins for your camp',badge:ready,go:openTasks},
@@ -1161,18 +1248,36 @@ function openHub(){
   show('hub');
 }
 function openLevels(){
-  const grid=$('#lvlGrid');grid.innerHTML='';
-  for(let n=1;n<=LEVELS;n++){const cfg=levelCfg(n),lock=n>save.unlocked,b=document.createElement('button');b.className='lvl'+(lock?' locked':save.cleared[n]?' done':'');b.style.setProperty('--i',Math.min(n-1,14));
-    b.innerHTML='<span class="n"></span><b></b><small></small>';b.querySelector('.n').textContent=lock?'?':n;b.querySelector('b').textContent=cfg.name;
-    const sk=SKILLS.find(s=>s.unlock===n&&n>1);
-    b.querySelector('small').textContent=lock?`Clear temple ${n-1} first`:save.best[n]?`Best: ${save.best[n]}`:sk?`New skill: ${sk.n}!`:`${cfg.colors} colors · reward ${cfg.reward} coins`;
-    b.onclick=()=>{if(n<=save.unlocked)openPrep(n)};grid.appendChild(b)}
-  show('levels');
+  const map=$('#lvlGrid');map.innerHTML='';let cur=null;$('#mapStars').textContent=totalStars();
+  const H0=70+(PER-1)*86+80;
+  CHAPTERS.forEach((ch,c)=>{
+    const open=gateOk(c),sec=document.createElement('section');sec.className='chap ch-'+ch.id+(open?'':' locked');
+    const pts=[];for(let i=0;i<PER;i++)pts.push([50+28*Math.sin(i*.9+c*1.3),70+i*86]);
+    let d=`M${pts[0][0]} ${pts[0][1]}`;for(let i=1;i<PER;i++)d+=` C${pts[i-1][0]} ${pts[i-1][1]+43} ${pts[i][0]} ${pts[i][1]-43} ${pts[i][0]} ${pts[i][1]}`;
+    sec.innerHTML=`<div class="chap-h"><div><small>Chapter ${c+1}</small><b></b></div><span class="cstars">★ ${starsIn(c)}/${PER*3}</span></div>
+      <div class="chap-path" style="height:${H0}px"><svg viewBox="0 0 100 ${H0}" preserveAspectRatio="none" aria-hidden="true">
+      <path d="${d}" fill="none" stroke="rgba(0,0,0,.45)" stroke-width="22" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+      <path d="${d}" fill="none" stroke="${ch.path}" stroke-width="5" stroke-dasharray="2 12" stroke-linecap="round" vector-effect="non-scaling-stroke" opacity=".85"/></svg></div>`;
+    sec.querySelector('b').textContent=ch.n;const box=sec.querySelector('.chap-path');
+    pts.forEach(([x,y],i)=>{const n=c*PER+i+1,cfg=levelCfg(n),ok=canPlay(n),st=save.stars[n]||0,b=document.createElement('button');
+      b.className='node'+(cfg.boss?' boss':'')+(!ok?' locked':save.cleared[n]?' done':'');b.style.left=x+'%';b.style.top=y+'px';
+      b.innerHTML=(cfg.boss?ICON.skull:String(cfg.li))+(save.cleared[n]?`<span class="st">${'★'.repeat(st)}<i>${'★'.repeat(3-st)}</i></span>`:'')+(cfg.rule&&ok?`<span class="rb">${ICON[RULES[cfg.rule].ic]}</span>`:'');
+      b.setAttribute('aria-label',`Level ${c+1}-${cfg.li}: ${cfg.name}${ok?'':' (locked)'}`);
+      if(ok&&n===Math.min(save.unlocked,LEVELS)&&!save.cleared[n]){b.classList.add('cur');cur=b}
+      b.onclick=()=>{if(canPlay(n))openPrep(n)};box.appendChild(b)});
+    if(!open){const g=document.createElement('div');g.className='gate';
+      g.innerHTML=`<b>Locked</b><span></span><span></span>`;const sp=g.querySelectorAll('span');
+      sp[0].textContent=`Beat the ${CHAPTERS[c-1].boss} in ${CHAPTERS[c-1].n}`;
+      sp[1].textContent=`and collect ★ ${GATE[c]} stars (you have ${starsBefore(c)})`;box.appendChild(g)}
+    map.appendChild(sec)});
+  show('levels');if(cur)setTimeout(()=>cur.scrollIntoView({block:'center',behavior:'smooth'}),80);
 }
 function endLevel(win){
   const n=G.n,endless=G.endless;
   let reward=0,first=false;const before=save.unlocked;
-  if(win){first=!save.cleared[n];reward=Math.round(G.cfg.reward*(first?2:1)*coinBonus());save.cleared[n]=1;save.stats.wins++;if(G.lives>=G.maxLives)save.stats.perfect=(save.stats.perfect||0)+1;save.unlocked=Math.max(save.unlocked,Math.min(LEVELS,n+1)+(n>=LEVELS?1:0))}
+  let stars=0,newStars=0;
+  if(win&&!endless){stars=1+(G.lives>=G.maxLives?1:0)+(G.shotsUsed<=G.par?1:0);const old=save.stars[n]||0;if(stars>old){newStars=stars-old;save.stars[n]=stars}}
+  if(win){first=!save.cleared[n];reward=Math.round(G.cfg.reward*(first?2:1)*coinBonus())+newStars*25;save.cleared[n]=1;save.stats.wins++;if(G.lives>=G.maxLives)save.stats.perfect=(save.stats.perfect||0)+1;save.unlocked=Math.max(save.unlocked,Math.min(LEVELS,n+1)+(n>=LEVELS?1:0))}
   const lifeBonus=win?G.lives*300:0,total=G.score+lifeBonus,earned=Math.floor(G.coins)+reward;
   save.coins+=earned-G.banked;save.stats.coins+=earned-G.banked;G.banked=earned;
   let newBest=false;
@@ -1180,16 +1285,21 @@ function endLevel(win){
   else{newBest=total>(save.best[n]||0);if(newBest)save.best[n]=total}
   persist();
   $('#endTitle').textContent=endless?(newBest?'New best score!':'Great run!'):win?'Temple cleared!':'The gems got away!';
+  $('#endStars').innerHTML=win&&!endless?[0,1,2].map(i=>`<span class="${i<stars?'on':''}" style="animation-delay:${.2+i*.25}s">★</span>`).join(''):'';
+  if(win&&!endless)[0,1,2].slice(0,stars).forEach(i=>setTimeout(()=>SFX.play('coin'),200+i*250));
   const t=$('#endTally');t.innerHTML='';
   const row=(a,b)=>{const x=document.createElement('span'),y=document.createElement('span');x.textContent=a;y.textContent=b;t.append(x,y)};
   row('Score',G.score);if(win)row(`Hearts left bonus (${G.lives} × 300)`,lifeBonus);if(!endless)row('Total',total);
   row(endless?'Best Endless score':'Best',endless?save.bestEndless:(save.best[n]||0));
+  if(win&&!endless){row('★ No hearts lost',G.lives>=G.maxLives?'Yes':'No');row(`★ ${G.par} shots or fewer`,`${G.shotsUsed} used`);if(newStars)row(`New stars (${newStars} × 25)`,newStars*25)}
   row('Coins from gems',Math.floor(G.coins));if(win)row(first?'Temple reward (first clear ×2)':'Temple reward',reward);
   const newSkill=SKILLS.find(s=>s.unlock>before&&s.unlock<=save.unlocked);if(newSkill){const x=document.createElement('span');x.style.gridColumn='1/-1';x.style.color='#14907a';x.textContent=`New skill unlocked: ${newSkill.n}!`;t.appendChild(x)}
   const btns=$('#endBtns');btns.innerHTML='';const add=(l,cls,fn)=>{const b=document.createElement('button');b.className='btn '+cls;b.textContent=l;b.onclick=fn;btns.appendChild(b)};
   if(endless){add('Play again','gold',()=>startLevel(0,true))}
-  else{if(win&&n<LEVELS)add('Next temple','gold',()=>startLevel(n+1));add(win?'Replay':'Try again',win?'alt':'',()=>startLevel(n))}
-  add('Camp','alt',openCamp);add('Menu','alt',openHub);
+  else{if(win&&n<LEVELS&&canPlay(n+1))add('Next temple','gold',()=>openPrep(n+1));add(win?'Replay':'Try again',win?'alt':'',()=>openPrep(n));
+    if(win&&n<LEVELS&&!canPlay(n+1)){const c=chOf(n+1),x=document.createElement('span');x.style.gridColumn='1/-1';x.style.color='#a3101e';x.textContent=`${CHAPTERS[c].n} needs ★ ${GATE[c]} stars. You have ${starsBefore(c)}. Replay temples for more stars!`;t.appendChild(x)}
+    else if(win&&G.cfg.boss&&n<LEVELS){const x=document.createElement('span');x.style.gridColumn='1/-1';x.style.color='#14907a';x.textContent=`Chapter complete! ${CHAPTERS[chOf(n+1)].n} is open.`;t.appendChild(x)}}
+  if(!endless)add('Map','alt',openLevels);add('Camp','alt',openCamp);add('Menu','alt',openHub);
   G.state='done';hideHud();show('end');if(earned>0)coinFly($('#endTally'),earned,save.coins-earned);checkAch();
 }
 function togglePause(){if(!G||G.state!=='play')return;paused=!paused;show(paused?'pause':null)}
@@ -1291,7 +1401,12 @@ let prepSel=new Set(),prepTarget=null;
 function openPrep(n,endless=false){
   G=null;paused=false;hideHud();prepTarget={n,endless};prepSel=new Set();
   $('#prepTitle').textContent=endless?'Endless Jungle':levelCfg(n).name;
-  $('#prepSub').textContent=endless?'One heart. The chain never stops and keeps speeding up.':`Temple ${n} · ${levelCfg(n).colors} colors`;
+  const cfg=endless?null:levelCfg(n);
+  $('#prepSub').textContent=endless?'One heart. The chain never stops and keeps speeding up.':`${CHAPTERS[cfg.c].n} · Level ${cfg.li}${cfg.boss?' · Boss temple':''} · ${cfg.colors} colors`;
+  const pg=$('#prepGoals');pg.innerHTML='';
+  if(cfg){if(cfg.rule){const d=document.createElement('div');d.className='rule';d.innerHTML=ICON[RULES[cfg.rule].ic]+'<span><b></b><br><span></span></span>';
+      d.querySelector('b').textContent=RULES[cfg.rule].n;d.querySelector('span span').textContent=RULES[cfg.rule].d(cfg);pg.appendChild(d)}
+    for(const g of['Clear the temple','Don’t lose a heart',`Use ${parShots(cfg)} shots or fewer`]){const d=document.createElement('div');d.className='g';d.textContent=g;pg.appendChild(d)}}
   renderPrep();show('prep');
 }
 function renderPrep(){
@@ -1333,7 +1448,7 @@ const ACH=[
   {id:'first',n:'First Steps',d:'Clear your first temple',goal:1,val:()=>cleared(),r:100},
   {id:'t10',n:'Temple Explorer',d:'Clear 10 temples',goal:10,val:()=>cleared(),r:300},
   {id:'t25',n:'Temple Master',d:'Clear 25 temples',goal:25,val:()=>cleared(),r:800},
-  {id:'t50',n:'Legend of the Jungle',d:'Clear all 50 temples',goal:50,val:()=>cleared(),r:2500},
+  {id:'t50',n:'Legend of the Jungle',d:'Clear all 75 temples',goal:75,val:()=>cleared(),r:2500},
   {id:'g500',n:'Gem Popper',d:'Pop 500 gems',goal:500,val:()=>save.stats.gems,r:150},
   {id:'g5k',n:'Gem Crusher',d:'Pop 5,000 gems',goal:5000,val:()=>save.stats.gems,r:800},
   {id:'c3',n:'Chain Reaction',d:'Make a ×3 combo',goal:3,val:()=>save.stats.maxCombo||0,r:150},
@@ -1345,6 +1460,8 @@ const ACH=[
   {id:'camp6',n:'Camp Builder',d:'Reach camp level 6',goal:6,val:()=>campLv(),r:250},
   {id:'camp18',n:'Village Chief',d:'Fully build your camp',goal:18,val:()=>campLv(),r:1000},
   {id:'style',n:'Fashion Pup',d:'Own 7 Biscuit styles',goal:7,val:()=>save.styles.length,r:300},
+  {id:'s50',n:'Star Collector',d:'Earn 50 stars',goal:50,val:()=>totalStars(),r:300},
+  {id:'s150',n:'Star Master',d:'Earn 150 stars',goal:150,val:()=>totalStars(),r:1000},
   {id:'rich',n:'Treasure Hunter',d:'Earn 10,000 coins',goal:10000,val:()=>save.stats.coins,r:600}];
 function checkAch(){
   const was=save.coins,got=[];for(const a of ACH){if(save.ach.includes(a.id))continue;if(a.val()>=a.goal){save.ach.push(a.id);save.coins+=a.r;got.push(a)}}
