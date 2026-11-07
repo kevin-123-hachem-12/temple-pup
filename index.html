@@ -153,6 +153,11 @@ p{margin:0}
 .chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px;margin:8px 0 16px}
 .chip{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 6px;border:3px solid var(--ink);border-radius:14px;background:#f8ecd0;cursor:pointer;font:900 14px var(--body);color:var(--ink);box-shadow:0 4px 0 var(--ink)}
 .chip:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+#styleBar{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;text-align:left}
+#styleBar small{display:block;font-weight:900;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#6b5636}
+#styleBar b{font-family:var(--display);font-weight:400;font-size:24px}
+#styleBuy .coin{width:20px;height:20px;vertical-align:-3px}
+.chip.try{background:#fff7e3;box-shadow:0 4px 0 var(--ink),0 0 0 4px rgba(255,107,74,.6)}
 .chip.on{background:var(--gold);box-shadow:0 4px 0 var(--ink),0 0 0 4px rgba(255,207,74,.5)}
 .chip .sw{width:40px;height:40px;border-radius:50%;border:3px solid var(--ink)}
 .chip small{font-weight:800;font-size:12px;color:#6b5636;display:flex;align-items:center;gap:4px}
@@ -306,6 +311,7 @@ p{margin:0}
   <div class="wrap">
     <div class="row between"><h1 class="h1">Customize Biscuit</h1><div class="row"><span class="coins"><span class="coin"></span><span class="cCoins">0</span></span><button class="btn alt back">Back</button></div></div>
     <div id="styleArt"></div>
+    <div id="styleBar" class="tablet" hidden><div><small>Trying on</small><b id="styleTry"></b></div><div class="row"><button class="btn gold" id="styleBuy"></button><button class="btn alt" id="styleCancel">Cancel</button></div></div>
     <div class="tablet" style="width:100%;text-align:left" id="styleList"></div>
   </div>
 </section>
@@ -586,7 +592,7 @@ const ARMORS=[
   {id:'amethyst',n:'Amethyst',c:['#dcb0ff','#3e0d7a'],tile:'#f2dcff',cost:350},
   {id:'royal',n:'Royal Gold',c:['#fff1a8','#a87a08'],tile:'#ffffff',cost:800}];
 const HATS=[{id:'band',n:'Gold Band',cost:0},{id:'crown',n:'Crown',cost:500},{id:'feathers',n:'Feather Crest',cost:400},{id:'none',n:'No Hat',cost:0}];
-function curSkin(){const f=FURS.find(x=>x.id===save.skin.fur)||FURS[0],a=ARMORS.find(x=>x.id===save.skin.armor)||ARMORS[0],h=HATS.find(x=>x.id===save.skin.hat)||HATS[0];return{f,a,h,key:f.id+'|'+a.id+'|'+h.id}}
+function curSkin(sk=save.skin){const f=FURS.find(x=>x.id===sk.fur)||FURS[0],a=ARMORS.find(x=>x.id===sk.armor)||ARMORS[0],h=HATS.find(x=>x.id===sk.hat)||HATS[0];return{f,a,h,key:f.id+'|'+a.id+'|'+h.id}}
 function paw(c,x,y,s,F){ell(c,x,y,13,9.5,rg(c,x,y,13,F.snout[0],F.fur[1]),true,s*.35,2.5);for(let k=-1;k<=1;k++)line(c,x+7,y+k*4.5,x+12,y+k*5,1.6,'rgba(60,30,10,.55)')}
 function pupTop(c,blink,S){
   S=S||curSkin();const F=S.f,A=S.a;
@@ -1623,17 +1629,25 @@ function openTrophies(){
 // ---------- customize Biscuit ----------
 // outfits earned by beating each chapter's boss
 function grantOutfits(){for(const a of ARMORS)if(a.unlock!=null&&save.cleared[(a.unlock+1)*PER]&&!save.styles.includes(a.id)){save.styles.push(a.id);persist();note(`New outfit: ${a.n}!`,'Wear it in Customize Biscuit')}}
-function openStyle(){
-  grantOutfits();const box=$('#styleList');box.innerHTML='';
+let tryOn=null;
+function openStyle(){tryOn=null;renderStyle();show('style')}
+$('#styleCancel').onclick=()=>{tryOn=null;SFX.play('click');renderStyle()};
+$('#styleBuy').onclick=()=>{if(!tryOn)return;const{it,slot}=tryOn;
+  if(it.unlock!=null){note(`${it.n} is a chapter reward`,`Beat the ${CHAPTERS[it.unlock].boss} to unlock it`);return}
+  if(save.coins<it.cost){note('Not enough coins',`You need ${it.cost-Math.floor(save.coins)} more`);return}
+  save.coins-=it.cost;save.styles.push(it.id);save.skin[slot]=it.id;tryOn=null;persist();SFX.play('coin');note(`${it.n} unlocked!`,'Biscuit looks great');checkAch();renderStyle()};
+function renderStyle(){
+  grantOutfits();const box=$('#styleList');box.innerHTML='';wallet();
+  const bar=$('#styleBar');bar.hidden=!tryOn;
+  if(tryOn){const it=tryOn.it;$('#styleTry').textContent=it.n;
+    $('#styleBuy').innerHTML=it.unlock!=null?'Locked':`Buy · <span class="coin"></span> ${it.cost}`;$('#styleBuy').disabled=it.unlock!=null}
   const section=(title,items,slot,swatch)=>{const h=document.createElement('h3');h.style.fontSize='22px';h.textContent=title;box.appendChild(h);
     const grid=document.createElement('div');grid.className='chips';
-    for(const it of items){const owned=save.styles.includes(it.id),on=save.skin[slot]===it.id,b=document.createElement('button');b.className='chip'+(on?' on':'');
+    for(const it of items){const owned=save.styles.includes(it.id),on=save.skin[slot]===it.id&&!(tryOn&&tryOn.slot===slot),b=document.createElement('button');b.className='chip'+(on?' on':'')+(tryOn&&tryOn.it===it?' try':'');
       b.innerHTML=`<span class="sw" style="${swatch(it)}"></span><span></span><small>${on?'Wearing':owned?'Tap to wear':it.unlock!=null?`Beat the ${CHAPTERS[it.unlock].boss}`:`<span class="coin"></span>${it.cost}`}</small>`;
       b.children[1].textContent=it.n;if(it.unlock!=null&&!owned)b.style.opacity=.75;
-      b.onclick=()=>{if(owned){save.skin[slot]=it.id;persist();SFX.play('swap');openStyle();return}
-        if(it.unlock!=null){note(`${it.n} is a chapter reward`,`Beat the ${CHAPTERS[it.unlock].boss} to unlock it`);return}
-        if(save.coins<it.cost){note('Not enough coins',`You need ${it.cost-Math.floor(save.coins)} more`);return}
-        save.coins-=it.cost;save.styles.push(it.id);save.skin[slot]=it.id;persist();SFX.play('coin');note(`${it.n} unlocked!`,'Biscuit looks great');checkAch();openStyle()};
+      b.onclick=()=>{if(owned){save.skin[slot]=it.id;tryOn=null;persist();SFX.play('swap');renderStyle();return}
+        tryOn={slot,it};SFX.play('swap');renderStyle();$('#styleArt').scrollIntoView({block:'start',behavior:'smooth'})};
       grid.appendChild(b)}box.appendChild(grid)};
   section('Fur',FURS,'fur',f=>`background:${f.spots?'radial-gradient(circle at 30% 35%,#1e1e24 0 4px,transparent 5px),radial-gradient(circle at 68% 60%,#1e1e24 0 5px,transparent 6px),':''}linear-gradient(135deg,${f.fur[0]},${f.fur[1]})`);
   section('Armor',ARMORS,'armor',a=>`background:linear-gradient(135deg,${a.c[0]},${a.c[1]})`);
@@ -1643,7 +1657,7 @@ function openStyle(){
 function stylePreview(c,w,h,t){
   c.fillStyle=lg(c,0,0,0,h,['#2f6d52','#123222']);c.fillRect(0,0,w,h);glow(c,w/2,h/2,h*.6,'255,220,140',.35);
   const s=h/170;c.save();c.translate(w/2,h/2);c.scale(s,s);stoneDisc(c,70);drawFire(c,-92,12,t,.9);drawFire(c,92,12,t+1,.9);
-  c.scale(1.1,1.1);drawHero(c,t,{aim:-Math.PI/2+Math.sin(t*.8)*1.2,cur:Math.floor(t)%6,nxt:(Math.floor(t)+2)%6,blink:(t%3.6)<.12},s*1.1*DPR);c.restore();
+  c.scale(1.1,1.1);drawHero(c,t,{aim:-Math.PI/2+Math.sin(t*.8)*1.2,cur:Math.floor(t)%6,nxt:(Math.floor(t)+2)%6,blink:(t%3.6)<.12,skin:curSkin(tryOn?Object.assign({},save.skin,{[tryOn.slot]:tryOn.it.id}):save.skin)},s*1.1*DPR);c.restore();
 }
 
 // ---------- Jungle Camp scene (640x360). The still parts are drawn once into a cache; only moving bits redraw each frame. ----------
