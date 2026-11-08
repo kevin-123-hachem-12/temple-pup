@@ -62,7 +62,32 @@ p{margin:0}
 .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:center}
 .between{justify-content:space-between}
 .wrap{width:100%;max-width:860px;display:flex;flex-direction:column;gap:16px}
-#titleArt{width:min(440px,90vw);height:min(330px,40vh)}
+#title{background:none;padding:0;overflow:hidden;justify-content:flex-start}
+#homeArt{position:absolute;inset:0}
+#homeArt canvas{width:100%;height:100%;display:block}
+.home-logo{position:relative;z-index:2;margin-top:max(12px,env(safe-area-inset-top,0px));font-size:clamp(50px,13.5vw,100px);pointer-events:none}
+.home-menu{position:absolute;z-index:2;right:max(10px,3vw);bottom:max(64px,calc(env(safe-area-inset-bottom,0px) + 58px));width:min(300px,54vw);display:flex;flex-direction:column;gap:11px;
+  padding:14px 12px 16px;border:4px solid var(--ink);border-radius:20px 20px 28px 28px;box-shadow:0 8px 0 var(--ink),0 18px 40px rgba(0,0,0,.45),inset 0 0 0 4px rgba(255,255,255,.25),inset 0 0 0 8px #c98f10;
+  background:radial-gradient(circle at 20% 15%,rgba(255,255,255,.35),transparent 40%),repeating-linear-gradient(0deg,rgba(80,50,20,.08) 0 2px,transparent 2px 22px),linear-gradient(#e9d6a6,#b99a62)}
+.home-menu:before{content:'';position:absolute;left:50%;top:-30px;width:64px;height:40px;transform:translateX(-50%);border:4px solid var(--ink);border-bottom:0;border-radius:32px 32px 0 0;
+  background:radial-gradient(circle at 50% 70%,#ff6a5a 0 7px,var(--ink) 7px 10px,transparent 10px),linear-gradient(#e9d6a6,#cdb07a)}
+.home-sign{text-align:center;color:var(--ink);line-height:1.15}
+.home-sign b{display:block;font-family:var(--display);font-weight:400;font-size:clamp(17px,4.6vw,22px)}
+.home-sign small{display:block;font-weight:900;font-size:13px;color:#6b4a1c}
+.stone{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border:4px solid var(--ink);border-radius:14px;cursor:pointer;text-align:left;
+  font-family:var(--display);font-size:clamp(17px,4.7vw,26px);white-space:nowrap;letter-spacing:.02em;color:#ffe9a0;-webkit-text-stroke:3.5px var(--ink);paint-order:stroke fill;
+  background:radial-gradient(circle at 25% 20%,rgba(255,255,255,.3),transparent 45%),repeating-linear-gradient(115deg,rgba(0,0,0,.06) 0 3px,transparent 3px 14px),linear-gradient(#a8744a,#6e4526);
+  box-shadow:0 5px 0 var(--ink),inset 0 3px 0 rgba(255,255,255,.3),inset 0 -5px 0 rgba(0,0,0,.25);transition:transform .08s}
+.stone:nth-child(odd){transform:rotate(.8deg)}.stone:nth-child(even){transform:rotate(-.8deg)}
+.stone:active{transform:translateY(4px) scale(.98);box-shadow:0 1px 0 var(--ink),inset 0 3px 0 rgba(255,255,255,.3)}
+.stone.gold{color:#fff;font-size:clamp(23px,6.2vw,32px);background:radial-gradient(circle at 25% 20%,rgba(255,255,255,.45),transparent 45%),linear-gradient(#ffd75a,#e09a10)}
+.stone i{flex:none;width:38px;height:38px;border-radius:50%;border:3px solid var(--ink);display:grid;place-items:center;box-shadow:inset 0 -4px 0 rgba(0,0,0,.25)}
+.stone i svg{width:22px;height:22px}
+@media (hover:hover){.stone:hover{transform:translateY(-2px) rotate(-1deg)}}
+.home-snd{position:absolute;z-index:2;right:max(10px,3vw);bottom:max(10px,env(safe-area-inset-bottom,0px));display:flex;gap:8px}
+.home-snd .btn{font-size:15px;padding:8px 12px 7px}
+@media (min-aspect-ratio:1/1){.home-menu{right:max(16px,6vw);bottom:auto;top:50%;transform:translateY(-38%)}.home-logo{font-size:clamp(46px,9vh,90px)}}
+@media (max-height:560px){.home-menu{gap:7px;padding:10px}.stone{padding:6px 10px}.home-sign small{display:none}}
 #titleArt canvas,#hubArt canvas,#campArt canvas{width:100%;height:100%;display:block}
 .how{font-weight:800;font-size:15px;color:var(--muted);text-align:center;max-width:48ch;line-height:1.5;text-shadow:0 2px 6px #000}
 .coins{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-size:28px;letter-spacing:.03em;color:var(--gold);-webkit-text-stroke:4px var(--ink);paint-order:stroke fill;font-variant-numeric:tabular-nums}
@@ -256,17 +281,22 @@ p{margin:0}
 <div id="skills"><div class="skrow" id="skRow"></div></div>
 <div id="toast"></div>
 
-<section class="screen full on" id="title">
-  <div class="logo">Temple Pup<span>Biscuit the Brave</span></div>
-  <div id="titleArt"></div>
-  <p class="lead">A storm is waking the jungle temple and its magic gems are rolling toward the Jaguar Pit! Help Biscuit blast them with his gem cannon.</p>
-  <button class="btn big gold" id="playBtn">PLAY</button>
-  <div class="row"><button class="btn alt sndBtn">Sound: On</button><button class="btn alt musBtn">Music: On</button></div>
+<section class="screen on" id="title">
+  <div id="homeArt"></div>
+  <div class="logo home-logo">Temple Pup<span>Biscuit the Brave</span></div>
+  <nav class="home-menu" aria-label="Main menu">
+    <div class="home-sign"><b id="homeHi">Welcome, explorer!</b><small id="homeNext"></small></div>
+    <button class="stone gold" id="playBtn"></button>
+    <button class="stone" id="hmEndless"></button>
+    <button class="stone" id="hmStyle"></button>
+    <button class="stone" id="hmBase"></button>
+  </nav>
+  <div class="home-snd"><button class="btn alt sm sndBtn">Sound: On</button><button class="btn alt sm musBtn">Music: On</button></div>
 </section>
 
 <section class="screen full" id="hub">
   <div class="wrap">
-    <div class="row between"><h1 class="h1">Jungle Base</h1><span class="coins"><span class="coin"></span><span class="cCoins">0</span></span></div>
+    <div class="row between"><h1 class="h1">Jungle Base</h1><div class="row"><span class="coins"><span class="coin"></span><span class="cCoins">0</span></span><button class="btn alt sm" id="homeBtn">Home</button></div></div>
     <div id="hubArt"></div>
     <div class="tiles" id="tiles"></div>
     <p class="how">Aim with your finger or mouse and let go (or click) to shoot. Tap Biscuit, right-click or press Space to swap gems. Pop gems to charge your skills, then tap a skill (or press 1 to 4).</p>
@@ -1474,7 +1504,15 @@ function endLevel(win){
   G.state='done';hideHud();show('end');if(win)grantOutfits();if(earned>0)coinFly($('#endTally'),earned,save.coins-earned);checkAch();
 }
 function togglePause(){if(!G||G.state!=='play')return;paused=!paused;show(paused?'pause':null)}
-$('#playBtn').onclick=openHub;$('#hPause').onclick=togglePause;$('#resumeBtn').onclick=togglePause;
+// home menu: each path starts the music, offers the daily treasure first, then goes where you tapped
+function fromHome(fn){SFX.setPlaying(true);ensureTasks();buildJungle();if(dailyReady()&&!dailyShown){dailyShown=true;openDaily();return}fn()}
+function homeBtn(id,ic,col,label,fn){const b=$(id);b.innerHTML=`<i style="background:${col}">${ic}</i><span></span>`;b.querySelector('span').textContent=label;b.onclick=()=>fromHome(fn)}
+homeBtn('#playBtn',ICON.star,'#e8452c','Adventure',openLevels);homeBtn('#hmEndless',ICON.inf,'#8a33e8','Endless',()=>openPrep(0,true));
+homeBtn('#hmStyle',ICON.paw,'#e3207a','Customize',openStyle);homeBtn('#hmBase',ICON.hut,'#1fae94','Jungle Base',openHub);
+function updateHome(){const n=Math.min(save.unlocked,LEVELS),c=chOf(n);$('#homeHi').textContent=save.unlocked>1?'Welcome back, explorer!':'Welcome, explorer!';
+  $('#homeNext').textContent=save.unlocked>1?`Next: ${CHAPTERS[c].n} ${c+1}-${(n-1)%PER+1} · ★ ${totalStars()}`:'A storm is waking the temple…'}
+function openHome(){G=null;paused=false;hideHud();updateHome();show('title')}
+$('#homeBtn').onclick=openHome;updateHome();$('#hPause').onclick=togglePause;$('#resumeBtn').onclick=togglePause;
 $('#quitBtn').onclick=()=>{bankRun();paused=false;openHub()};
 function bankRun(){
   if(G&&G.state!=='done'){const d=Math.floor(G.coins)-G.banked;if(d>0){save.coins+=d;save.stats.coins+=d;G.banked+=d}}
@@ -1835,6 +1873,72 @@ function drawCamp(c,Wd,Hd,t){
 const arts=[];
 function addArt(el,fn){const c=document.createElement('canvas');el.appendChild(c);const a={el,c,fn,w:0,h:0};arts.push(a);sizeArt(a);return a}
 function sizeArt(a){const r=a.el.getBoundingClientRect();if(!r.width)return;a.w=r.width;a.h=r.height;a.c.width=Math.round(r.width*DPR);a.c.height=Math.round(r.height*DPR)}
+// ---------- home screen: a sunny temple valley with Biscuit standing guard ----------
+const homeBg={cv:document.createElement('canvas'),w:0,h:0};
+function homeLayout(w,h){const port=w<h*1.05,pyW=Math.min(w*(port?.86:.5),h*.62),pyX=port?w*.5:w*.47,pyY=h*(port?.47:.6);
+  return{port,pyW,pyX,pyY,bx:port?w*.25:w*.24,by:h*(port?.94:.97),bs:Math.min(w/(port?430:620),h/(port?640:520))}}
+function buildHomeBg(w,h){const x=homeBg.cv.getContext('2d'),L=homeLayout(w,h),r=seeded(31);homeBg.w=w;homeBg.h=h;
+  homeBg.cv.width=Math.ceil(w*DPR);homeBg.cv.height=Math.ceil(h*DPR);x.setTransform(DPR,0,0,DPR,0,0);
+  const hz=L.pyY;
+  x.fillStyle=lg(x,0,0,0,hz,['#2a6aa6','#6fb4d8','#bfe2d8','#ffe2a0']);x.fillRect(0,0,w,hz+2);
+  x.fillStyle=rg(x,L.pyX,hz*.42,hz*.9,'rgba(255,240,180,.75)','rgba(255,240,180,0)',0,0);x.fillRect(0,0,w,hz);
+  for(let i=0;i<5;i++)cloud(x,r()*w,hz*(.12+r()*.3),.8+r()*1.2);
+  for(const[k,col,amp] of[[.0,'#7fa6a0',.2],[.4,'#5d8a7a',.13]]){x.fillStyle=col;x.beginPath();x.moveTo(0,hz);for(let i=0;i<=12;i++)x.lineTo(i/12*w,hz-hz*amp*(.4+.6*Math.abs(Math.sin(i*1.7+k*5))));x.lineTo(w,hz);x.fill()}
+  // the step temple, crowned with a carved dog-guardian shrine
+  const W0=L.pyW,tiers=5,th=W0*.085,base=hz+th*.4;
+  for(let i=0;i<tiers;i++){const tw=W0*(1-i*.15),y=base-th*(i+1);rr(x,L.pyX-tw/2,y,tw,th,4,lg(x,0,y,0,y+th,['#ecd6a0','#c9a86a','#8f7046']),true,2.5);
+    x.fillStyle='rgba(60,40,15,.25)';for(let k=0;k<tw/26;k++)x.fillRect(L.pyX-tw/2+6+k*26,y+th*.55,14,3);
+    for(let k=0;k<2;k++)rr(x,L.pyX+(k?1:-1)*tw*.33-6,y+th*.25,12,th*.5,2,'#21c2b0',true,1.5)}
+  const sw=W0*.16,sTop=base-th*tiers;x.fillStyle=lg(x,0,sTop,0,base,['#f4e2b4','#b9955a']);x.fillRect(L.pyX-sw/2,sTop,sw,base-sTop);
+  x.strokeStyle='rgba(60,40,15,.35)';x.lineWidth=1.5;for(let y=sTop+6;y<base;y+=6){x.beginPath();x.moveTo(L.pyX-sw/2,y);x.lineTo(L.pyX+sw/2,y);x.stroke()}
+  x.lineWidth=2.5;x.strokeStyle=INK;x.strokeRect(L.pyX-sw/2,sTop,sw,base-sTop);
+  const shW=W0*.3,shH=th*1.7,shY=sTop-shH;rr(x,L.pyX-shW/2,shY,shW,shH,6,lg(x,0,shY,0,sTop,['#f4e2b4','#a8854e']),true,2.5);
+  const fx=L.pyX,fy=shY+shH*.52,fr=shH*.36;for(const k of[-1,1])poly(x,[fx+k*fr*.55,fy-fr*.6,fx+k*fr*1.25,fy-fr*1.35,fx+k*fr*1.05,fy-fr*.1],'#c9a86a');
+  circ(x,fx,fy,fr,rg(x,fx,fy,fr,'#f4e2b4','#a8854e'),true,2.2);for(const k of[-1,1])circ(x,fx+k*fr*.38,fy-fr*.15,fr*.16,'#21c2b0',true,1.5);ell(x,fx,fy+fr*.35,fr*.22,fr*.14,INK,false);
+  // valley floor, river glints and a stone road up to the temple
+  x.fillStyle=lg(x,0,hz,0,h,['#7cc04a','#4f9a35','#2f6d2a']);x.fillRect(0,hz,w,h-hz);
+  for(let i=0;i<14;i++){let tx=r()*w;if(Math.abs(tx-L.pyX)<W0*.62)tx=L.pyX+Math.sign(tx-L.pyX||1)*(W0*.62+r()*w*.1);const ty=hz+4+r()*(h-hz)*.3;tree(x,tx,ty,.35+r()*.35,r()<.5)}
+  const pth=(t)=>{const y=hz+(h-hz)*t;return[L.pyX+(L.port?-1:-1)*Math.sin(t*3.4)*w*.1*t+(t*t)*(L.bx-L.pyX)*.2,y,sw*.5+t*w*(L.port?.32:.2)]};
+  x.beginPath();for(let i=0;i<=30;i++){const[px,py,pw]=pth(i/30);i?x.lineTo(px-pw/2,py):x.moveTo(px-pw/2,py)}for(let i=30;i>=0;i--){const[px,py,pw]=pth(i/30);x.lineTo(px+pw/2,py)}x.closePath();
+  x.fillStyle=lg(x,0,hz,0,h,['#d9c08a','#b8955e']);x.fill();x.lineWidth=3;x.strokeStyle='rgba(43,29,16,.6)';x.stroke();
+  for(let i=1;i<40;i++){const t=i/40,[px,py,pw]=pth(t);for(let k=0;k<3;k++){const sx=px+(k-1)*pw*.3+rnd(-4,4);ell(x,sx,py,pw*.12,pw*.05,lg(x,0,py-pw*.05,0,py+pw*.05,['#f0dcaa','#a8854e']),true,0,1.4)}}
+  for(const side of[-1,1])for(let i=0;i<4;i++)palm(x,L.pyX+side*(W0*.62+i*w*.07),hz+10+i*8,.6+i*.12);
+  const big=(bx,by,a,s2)=>{for(let k=0;k<6;k++)leaf(x,bx,by,s2*(1-k*.07),a+(k-2.5)*.33,['#2f7a35','#4aa043','#256b2c'][k%3],'#0f3518')};
+  const m=Math.min(w,h);big(-20,h+10,-.55,m*.42);big(w+20,h+20,Math.PI+.6,m*.36);big(-30,-20,.75,m*.3);big(w+30,-20,Math.PI-.75,m*.28);
+}
+function homeScene(c,w,h,t){
+  if(homeBg.w!==w||homeBg.h!==h)buildHomeBg(w,h);c.drawImage(homeBg.cv,0,0,w,h);const L=homeLayout(w,h);
+  c.save();c.globalCompositeOperation='lighter';c.translate(L.pyX,L.pyY*.42);for(let i=0;i<12;i++){c.rotate(TAU/12);c.fillStyle=`rgba(255,240,190,${.05+.03*Math.sin(t*1.5+i)})`;c.beginPath();c.moveTo(0,0);c.lineTo(-30,-Math.max(w,h));c.lineTo(30,-Math.max(w,h));c.fill()}c.restore();
+  const th=L.pyW*.085;for(const k of[-1,1])drawFire(c,L.pyX+k*L.pyW*.12,L.pyY-th*.2,t+(k>0?1:0),Math.max(.45,L.pyW/700));
+  for(let i=0;i<7;i++){const a=t*.4+i/7*TAU,gx=L.pyX+Math.cos(a)*L.pyW*.55,gy=L.pyY-L.pyW*.42+Math.sin(a)*L.pyW*.12+Math.sin(t*2+i)*6;drawGem(c,gx,gy,Math.max(10,L.pyW*.035),i%6,null,t,t*2+i,false)}
+  for(let i=0;i<8;i++)glow(c,(i*137+t*14)%w,h*.6+Math.sin(t+i*2)*h*.15,7,'220,255,140',.5*(Math.sin(t*3+i)+1)/2);
+  c.save();c.translate(L.bx,L.by);c.scale(L.bs,L.bs);pupFront(c,t);c.restore();
+}
+// Biscuit facing the player, sitting proud and waving
+function pupFront(c,t,S){S=S||curSkin();const F=S.f,A=S.a,blink=(t%3.8)<.13,wave=Math.sin(t*5)*.35;
+  c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.ellipse(0,0,96,18,0,0,TAU);c.fill();
+  c.save();c.translate(52,-40);c.rotate(Math.sin(t*7)*.35);c.beginPath();c.moveTo(0,0);c.bezierCurveTo(40,-10,58,-50,40,-74);c.lineCap='round';c.lineWidth=20;c.strokeStyle=INK;c.stroke();c.lineWidth=13;c.strokeStyle=F.fur[0];c.stroke();c.restore();
+  for(const k of[-1,1])ell(c,k*50,-20,34,22,rg(c,k*50,-24,34,F.fur[0],F.fur[1]),true,0,3);
+  ell(c,0,-78,62,74,rg(c,-14,-100,80,F.fur[0],F.fur[1]),true,0,3.5);
+  if(F.spots)for(const[sx,sy,sr] of[[-30,-50,9],[24,-36,7],[34,-96,8],[-38,-108,6]])circ(c,sx,sy,sr,'#1e1e24',false);
+  c.beginPath();c.moveTo(-40,-120);c.quadraticCurveTo(0,-104,40,-120);c.lineTo(34,-58);c.quadraticCurveTo(0,-30,-34,-58);c.closePath();c.fillStyle=lg(c,0,-120,0,-36,[A.c[0],A.c[1]]);c.fill();c.lineWidth=3;c.strokeStyle=INK;c.stroke();
+  c.save();c.clip();c.lineWidth=3;c.strokeStyle='#f5c542';for(let i=0;i<7;i++){const a=-Math.PI*.9+i/6*Math.PI*.8;c.beginPath();c.moveTo(0,-74);c.lineTo(Math.cos(a)*60,-74+Math.sin(a)*60);c.stroke()}c.restore();
+  for(let i=0;i<6;i++)rr(c,-30+i*12-3,-112+(i%2)*4,6,6,1.5,A.tile,false);circ(c,0,-74,12,goldG(c,0,-86,0,24),true,2.5);circ(c,0,-74,7,rg(c,0,-74,7,'#ffb0b0','#a3101e'),false);
+  for(const k of[-1,1])ell(c,k*24,-8,20,13,rg(c,k*24,-10,20,F.snout[0],F.fur[1]),true,0,2.6);
+  c.save();c.translate(-46,-104);c.rotate(.25);ell(c,0,40,19,44,rg(c,0,30,44,F.fur[0],F.fur[1]),true,0,3);c.restore();
+  c.save();c.translate(44,-112);c.rotate(-2.5+wave);ell(c,0,40,18,42,rg(c,0,30,44,F.fur[0],F.fur[1]),true,0,3);ell(c,0,82,20,15,rg(c,0,80,20,F.snout[0],F.fur[1]),true,0,2.6);for(let k=-1;k<=1;k++)line(c,k*7,88,k*7,94,1.8,'rgba(60,30,10,.6)');c.restore();
+  for(const k of[-1,1]){c.save();c.translate(k*52,-196);c.rotate(k*.35);ell(c,0,30,22,48,rg(c,0,24,48,F.ear[0],F.ear[1]),true,0,3);c.restore()}
+  circ(c,0,-200,62,rg(c,-16,-222,72,F.head[0],F.head[1]),true,3.5);
+  if(F.spots)for(const[sx,sy,sr] of[[34,-226,8],[-40,-182,6]])circ(c,sx,sy,sr,'#1e1e24',false);
+  const H=S.h.id;
+  if(H==='band'){c.beginPath();c.arc(0,-196,64,-2.55,-.6);c.lineWidth=11;c.strokeStyle=INK;c.stroke();c.lineWidth=7;c.strokeStyle='#f5c542';c.stroke();circ(c,0,-258,9,rg(c,0,-258,9,'#ffb0b0','#a3101e'),true,2.2)}
+  else if(H==='crown'){poly(c,[-40,-252,-44,-290,-22,-268,0,-300,22,-268,44,-290,40,-252],lg(c,0,-300,0,-252,[GOLDL,'#f5c542',GOLDD]));for(const k of[-1,0,1])circ(c,k*22,-262,5,k?'#1a74e8':'#e3202e',true,1.5)}
+  else if(H==='feathers'){['#ff4f5e','#ffcf4a','#36c862','#3fa1ff','#b06bff'].forEach((col,i)=>{c.save();c.translate(0,-250);c.rotate((i-2)*.32);ell(c,0,-30,9,32,col,true,0,2.2);c.restore()})}
+  for(const k of[-1,1]){if(blink)line(c,k*24-11,-214,k*24+11,-214,3.5);else{ell(c,k*24,-214,15,18,'#fff',true,0,2.8);circ(c,k*24+2,-210,9,'#5a3416',false);circ(c,k*24+3,-209,5,INK,false);circ(c,k*24+6,-214,3,'#fff',false)}
+    line(c,k*14,-240,k*36,-236,3.5)}
+  ell(c,0,-174,32,24,rg(c,0,-180,32,F.snout[0],F.snout[1]),true,0,3);ell(c,0,-186,12,8,INK,false);circ(c,-3,-189,2.5,'#fff',false);
+  c.beginPath();c.moveTo(-14,-170);c.quadraticCurveTo(0,-158,14,-170);c.lineWidth=3;c.strokeStyle=INK;c.stroke();ell(c,4,-160,8,10,'#ff7a8a',true,0,2.2);
+}
 function heroScene(c,w,h,t){
   const sc=Math.min(w/440,h/330);c.save();c.translate(w/2,h*.93);c.scale(sc,sc);
   glow(c,0,-130,200,'120,255,220',.35);
@@ -1855,7 +1959,7 @@ function hubScene(c,w,h,t){
   for(let i=0;i<6;i++){const x=w*.08+((i*w*.17+t*20)%(w*.84));drawGem(c,x,h*.26+Math.sin(t+i)*10,13,i%6,null,t,t*3,false)}
 }
 const hubBg={cv:document.createElement('canvas'),w:0,h:0};
-addArt($('#titleArt'),heroScene);addArt($('#hubArt'),hubScene);addArt($('#campArt'),drawCamp);addArt($('#styleArt'),stylePreview);
+addArt($('#homeArt'),homeScene);addArt($('#hubArt'),hubScene);addArt($('#campArt'),drawCamp);addArt($('#styleArt'),stylePreview);
 function drawArts(t){for(const a of arts){if(!a.el.offsetParent)continue;if(!a.w){sizeArt(a);if(!a.w)continue}const c=a.c.getContext('2d');c.setTransform(DPR,0,0,DPR,0,0);c.clearRect(0,0,a.w,a.h);a.fn(c,a.w,a.h,t)}}
 
 // ---------- loop ----------
