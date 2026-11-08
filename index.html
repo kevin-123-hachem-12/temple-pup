@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#061509"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Temple Pup"><link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><style>body{margin:0}[hidden]{display:none!important}</style><script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script></head><body><title>Temple Pup</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#061509"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Temple Pup"><meta name="description" content="Help Biscuit the pup blast the magic gems before they reach the Jaguar Pit. 75 temples, 5 worlds, epic bosses. Free to play on any phone."><meta property="og:type" content="website"><meta property="og:site_name" content="Temple Pup"><meta property="og:title" content="Temple Pup: Biscuit the Brave"><meta property="og:description" content="Pop the magic gems, beat the bosses, save the temple! Free to play on any phone."><meta property="og:url" content="https://kevin-123-hachem-12.github.io/temple-pup/"><meta property="og:image" content="https://kevin-123-hachem-12.github.io/temple-pup/preview.jpg"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><style>body{margin:0}[hidden]{display:none!important}</style><script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script></head><body><title>Temple Pup</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -132,6 +132,9 @@ p{margin:0}
 .lvl.done{box-shadow:0 5px 0 var(--ink),inset 0 0 0 3px var(--gold2)}
 
 .list{display:flex;flex-direction:column}
+.steps{margin:4px 0 0;padding-left:24px;display:flex;flex-direction:column;gap:8px;font-weight:800;font-size:17px}
+.steps b{font-family:var(--display);font-weight:400;letter-spacing:.02em}
+#shareWa{background:linear-gradient(#5fe08a,#1fa855)}
 #saveCode{width:100%;box-sizing:border-box;height:110px;margin:8px 0 12px;padding:10px;border:3px solid var(--ink);border-radius:14px;font:600 12px/1.35 ui-monospace,Consolas,monospace;resize:vertical;background:#fffaf0;color:var(--ink);word-break:break-all}
 .item{display:grid;grid-template-columns:1fr auto;gap:10px 14px;align-items:center;padding:12px 0;border-top:2px dashed rgba(80,55,20,.3);text-align:left}
 .item:first-child{border-top:0}
@@ -325,6 +328,27 @@ p{margin:0}
     <h3 style="font-size:20px;text-align:left">Boosters for this run</h3>
     <div class="boosts" id="boostList"></div>
     <div class="row"><button class="btn gold big" id="prepGo">Start</button><button class="btn alt" id="prepBack">Back</button></div>
+  </div>
+</section>
+
+<section class="screen full" id="share">
+  <div class="wrap">
+    <div class="row between"><h1 class="h1">Share &amp; Install</h1><button class="btn alt back">Back</button></div>
+    <div class="tablet" style="width:100%;text-align:left">
+      <h3 style="font-size:24px">Invite your friends</h3>
+      <p class="d" style="font-weight:700">Send them the game. It opens on any phone, Android or iPhone. No download needed.</p>
+      <div class="row" style="justify-content:flex-start">
+        <button class="btn green" id="shareWa">Send on WhatsApp</button>
+        <button class="btn alt" id="shareMore">More ways</button>
+        <button class="btn alt" id="shareCopy">Copy link</button>
+      </div>
+    </div>
+    <div class="tablet" style="width:100%;text-align:left" id="installCard">
+      <h3 style="font-size:24px">Put Temple Pup on your home screen</h3>
+      <p class="d" style="font-weight:700">It gets its own icon, opens full screen like a real app, and keeps your progress safer.</p>
+      <button class="btn gold" id="installNow" hidden>Install Temple Pup</button>
+      <ol class="steps" id="installSteps"></ol>
+    </div>
   </div>
 </section>
 
@@ -898,6 +922,7 @@ const ICON={
   moon:'<svg viewBox="0 0 24 24"><path d="M15 3a9 9 0 1 0 6 13A7.5 7.5 0 0 1 15 3z" fill="#6b5cff" stroke="#2b1d10" stroke-width="2.2" stroke-linejoin="round"/></svg>',
   rev:'<svg viewBox="0 0 24 24" fill="none" stroke="#2b1d10" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 8H6l4-4M4 16h14l-4 4"/></svg>',
   skull:'<svg viewBox="0 0 24 24"><path d="M12 2C7 2 3.5 5.5 3.5 10c0 2.8 1.4 4.6 3 5.6V19h3v-2h1v2h3v-2h1v2h3v-3.4c1.6-1 3-2.8 3-5.6C20.5 5.5 17 2 12 2z" fill="#fff7e3" stroke="#2b1d10" stroke-width="1.8" stroke-linejoin="round"/><circle cx="8.6" cy="10.5" r="2.3" fill="#2b1d10"/><circle cx="15.4" cy="10.5" r="2.3" fill="#2b1d10"/></svg>',
+  share:'<svg viewBox="0 0 24 24" fill="none" stroke="#2b1d10" stroke-width="2" stroke-linejoin="round"><circle cx="18" cy="5" r="3" fill="#fff"/><circle cx="6" cy="12" r="3" fill="#fff"/><circle cx="18" cy="19" r="3" fill="#fff"/><path d="m8.6 10.7 6.8-4M8.6 13.3l6.8 4" stroke="#fff" stroke-width="2.4"/></svg>',
   check:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>',
   gift:'<svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="2" fill="#fff" stroke="#2b1d10" stroke-width="1.6"/><path d="M12 9v12M3 13h18" stroke="#2b1d10" stroke-width="1.6"/><path d="M12 9c-2-4-6-4-6-1s4 1 6 1c2 0 6 2 6-1s-4-3-6 1z" fill="#fff" stroke="#2b1d10" stroke-width="1.6"/></svg>'
 };
@@ -1384,7 +1409,8 @@ function openHub(){
     {n:'Daily Treasure',ic:ICON.gift,col:'#f5b80c',s:dailyReady()?'Your treasure is ready!':`Day ${save.daily.streak} claimed · back tomorrow`,badge:dailyReady()?'!':0,go:()=>openDaily()},
     {n:'Trophies',ic:ICON.trophy,col:'#c98f10',s:`${save.ach.length} of ${ACH.length} earned`,go:openTrophies},
     {n:'Customize Biscuit',ic:ICON.paw,col:'#e3207a',s:`${save.styles.length} styles owned`,go:openStyle},
-    {n:'Save & Backup',ic:ICON.save,col:'#2f8f4e',s:'Backup code · install the game',go:openBackup}
+    {n:'Share & Install',ic:ICON.share,col:'#1fa855',s:standalone()?'Invite friends to play':'Invite friends · get the app',go:openShare},
+    {n:'Save & Backup',ic:ICON.save,col:'#2f8f4e',s:'Your backup code',go:openBackup}
   ];
   const box=$('#tiles');box.innerHTML='';
   for(const[i,tl] of tiles.entries()){const b=document.createElement('button');b.className='tile';b.style.setProperty('--i',i);
@@ -1588,6 +1614,21 @@ $('#saveLoad').onclick=()=>{const s=fromCode($('#saveCode').value);
   if(!s){note('That code did not work','Paste the whole code, starting with TP1-');return}
   if(!confirm(`Restore this save? Temple ${Math.min(s.unlocked,LEVELS)}, ${Math.floor(s.coins||0)} coins. Your current progress on this device will be replaced.`))return;
   save=tidySave(s);persist();setMuted(save.muted);setMusic(save.music);SFX.play('win');note('Progress restored!','Welcome back, Biscuit');openHub()};
+// ---------- share and install ----------
+const GAME_URL='https://kevin-123-hachem-12.github.io/temple-pup/';
+const SHARE_TXT='Come play Temple Pup with me! Help Biscuit the pup blast the magic gems before they reach the Jaguar Pit 🐶💎';
+const standalone=()=>matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true;
+const isIOS=()=>/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function openShare(){
+  $('#shareMore').hidden=!navigator.share;$('#installCard').hidden=standalone();$('#installNow').hidden=!installEvt;
+  const steps=isIOS()?['Open this page in <b>Safari</b>','Tap the <b>Share</b> button (square with an arrow up)','Scroll down and tap <b>Add to Home Screen</b>','Tap <b>Add</b>']
+    :installEvt?['Or tap Chrome’s <b>⋮</b> menu → <b>Install app</b>']:['Open this page in <b>Chrome</b>','Tap the <b>⋮</b> menu (top right)','Tap <b>Add to Home screen</b> or <b>Install app</b>','Tap <b>Install</b>'];
+  $('#installSteps').innerHTML=steps.map(x=>`<li>${x}</li>`).join('');show('share');
+}
+$('#shareWa').onclick=()=>{SFX.play('click');open('https://wa.me/?text='+encodeURIComponent(SHARE_TXT+'\n'+GAME_URL),'_blank')};
+$('#shareMore').onclick=async()=>{try{await navigator.share({title:'Temple Pup',text:SHARE_TXT,url:GAME_URL})}catch(e){}};
+$('#shareCopy').onclick=async()=>{try{await navigator.clipboard.writeText(GAME_URL);note('Link copied','Paste it in any chat')}catch(e){prompt('Copy this link',GAME_URL)}};
+$('#installNow').onclick=async()=>{if(!installEvt)return;installEvt.prompt();try{await installEvt.userChoice}catch(e){}installEvt=null;openShare()};
 let installEvt=null;
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;if($('#backup').classList.contains('on'))$('#installBox').hidden=false});
 $('#installBtn').onclick=async()=>{if(!installEvt)return;installEvt.prompt();try{await installEvt.userChoice}catch(e){}installEvt=null;$('#installBox').hidden=true};
