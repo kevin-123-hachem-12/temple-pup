@@ -66,28 +66,37 @@ p{margin:0}
 #homeArt{position:absolute;inset:0}
 #homeArt canvas{width:100%;height:100%;display:block}
 .home-logo{position:relative;z-index:2;margin-top:max(12px,env(safe-area-inset-top,0px));font-size:clamp(50px,13.5vw,100px);pointer-events:none}
-.home-menu{position:absolute;z-index:2;right:max(10px,3vw);bottom:max(64px,calc(env(safe-area-inset-bottom,0px) + 58px));width:min(300px,54vw);display:flex;flex-direction:column;gap:11px;
-  padding:14px 12px 16px;border:4px solid var(--ink);border-radius:20px 20px 28px 28px;box-shadow:0 8px 0 var(--ink),0 18px 40px rgba(0,0,0,.45),inset 0 0 0 4px rgba(255,255,255,.25),inset 0 0 0 8px #c98f10;
-  background:radial-gradient(circle at 20% 15%,rgba(255,255,255,.35),transparent 40%),repeating-linear-gradient(0deg,rgba(80,50,20,.08) 0 2px,transparent 2px 22px),linear-gradient(#e9d6a6,#b99a62)}
-.home-menu:before{content:'';position:absolute;left:50%;top:-30px;width:64px;height:40px;transform:translateX(-50%);border:4px solid var(--ink);border-bottom:0;border-radius:32px 32px 0 0;
-  background:radial-gradient(circle at 50% 70%,#ff6a5a 0 7px,var(--ink) 7px 10px,transparent 10px),linear-gradient(#e9d6a6,#cdb07a)}
-.home-sign{text-align:center;color:var(--ink);line-height:1.15}
-.home-sign b{display:block;font-family:var(--display);font-weight:400;font-size:clamp(17px,4.6vw,22px)}
-.home-sign small{display:block;font-weight:900;font-size:13px;color:#6b4a1c}
-.stone{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border:4px solid var(--ink);border-radius:14px;cursor:pointer;text-align:left;
-  font-family:var(--display);font-size:clamp(17px,4.7vw,26px);white-space:nowrap;letter-spacing:.02em;color:#ffe9a0;-webkit-text-stroke:3.5px var(--ink);paint-order:stroke fill;
-  background:radial-gradient(circle at 25% 20%,rgba(255,255,255,.3),transparent 45%),repeating-linear-gradient(115deg,rgba(0,0,0,.06) 0 3px,transparent 3px 14px),linear-gradient(#a8744a,#6e4526);
-  box-shadow:0 5px 0 var(--ink),inset 0 3px 0 rgba(255,255,255,.3),inset 0 -5px 0 rgba(0,0,0,.25);transition:transform .08s}
-.stone:nth-child(odd){transform:rotate(.8deg)}.stone:nth-child(even){transform:rotate(-.8deg)}
-.stone:active{transform:translateY(4px) scale(.98);box-shadow:0 1px 0 var(--ink),inset 0 3px 0 rgba(255,255,255,.3)}
-.stone.gold{color:#fff;font-size:clamp(23px,6.2vw,32px);background:radial-gradient(circle at 25% 20%,rgba(255,255,255,.45),transparent 45%),linear-gradient(#ffd75a,#e09a10)}
-.stone i{flex:none;width:38px;height:38px;border-radius:50%;border:3px solid var(--ink);display:grid;place-items:center;box-shadow:inset 0 -4px 0 rgba(0,0,0,.25)}
-.stone i svg{width:22px;height:22px}
-@media (hover:hover){.stone:hover{transform:translateY(-2px) rotate(-1deg)}}
-.home-snd{position:absolute;z-index:2;right:max(10px,3vw);bottom:max(10px,env(safe-area-inset-bottom,0px));display:flex;gap:8px}
-.home-snd .btn{font-size:15px;padding:8px 12px 7px}
-@media (min-aspect-ratio:1/1){.home-menu{right:max(16px,6vw);bottom:auto;top:50%;transform:translateY(-38%)}.home-logo{font-size:clamp(46px,9vh,90px)}}
-@media (max-height:560px){.home-menu{gap:7px;padding:10px}.stone{padding:6px 10px}.home-sign small{display:none}}
+.home-coins{grid-column:1/-1;justify-self:center;font-size:24px;background:rgba(43,29,16,.55);padding:4px 12px 4px 6px;border-radius:999px}
+.home-who{position:absolute;z-index:3;display:none;background:none;border:0;cursor:pointer}
+.home-menu{position:absolute;z-index:2;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.slab{position:relative;font-family:var(--display);text-transform:uppercase;letter-spacing:.05em;font-size:clamp(20px,5.8vw,30px);line-height:1;color:#ffd96a;-webkit-text-stroke:3.5px var(--ink);paint-order:stroke fill;
+  border:4px solid var(--ink);border-radius:10px;padding:12px 8px 10px;cursor:pointer;
+  box-shadow:0 6px 0 var(--ink),inset 0 4px 0 rgba(255,255,255,.28),inset 0 -6px 0 rgba(0,0,0,.28),inset 0 0 0 3px rgba(0,0,0,.12);
+  background:radial-gradient(circle at 28% 22%,rgba(255,255,255,.25),transparent 50%),repeating-linear-gradient(100deg,rgba(0,0,0,.07) 0 3px,transparent 3px 17px),linear-gradient(var(--a),var(--b));transition:transform .08s}
+.slab:nth-child(odd){transform:rotate(-.6deg)}.slab:nth-child(even){transform:rotate(.6deg)}
+.slab:active{transform:translateY(4px) scale(.98);box-shadow:0 2px 0 var(--ink),inset 0 4px 0 rgba(255,255,255,.28)}
+.slab.teal{--a:#56b9ad;--b:#226058}.slab.sand{--a:#c9a068;--b:#7a5630}.slab.purple{--a:#a184c0;--b:#56406e}
+.slab small{display:block;margin-top:4px;font:900 clamp(11px,1.8vh,14px) var(--body);letter-spacing:.02em;text-transform:none;color:#fff7e3;-webkit-text-stroke:0;text-shadow:0 1px 2px #000}
+.slab.big{grid-column:1/-1;font-size:clamp(32px,9.5vw,52px);padding:14px 8px 12px}
+.slab .badge,.ibtn .badge{position:absolute;top:-12px;right:-10px;min-width:28px;height:28px;padding:0 6px;border-radius:999px;background:#e3202e;color:#fff;border:3px solid var(--ink);font:400 16px/22px var(--display);-webkit-text-stroke:0;letter-spacing:0;text-transform:none}
+.home-icons{grid-column:1/-1;display:flex;gap:10px;justify-content:center}
+.ibtn{position:relative;width:54px;height:54px;flex:none;border-radius:50%;border:4px solid var(--ink);display:grid;place-items:center;cursor:pointer;padding:0;
+  background:radial-gradient(circle at 35% 30%,#fff3c8,#e8c26a 55%,#a87a2a);box-shadow:0 5px 0 var(--ink),inset 0 -4px 0 rgba(0,0,0,.2)}
+.ibtn svg{width:28px;height:28px}.ibtn.off{filter:grayscale(1) brightness(.85)}
+.ibtn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--ink)}
+/* wide screens with the painted home art: the menu sits on the carved stone pillar in the picture */
+#title.img-land .home-logo{display:none}
+#title.img-land .home-who{display:block}
+#title.img-land .home-menu{right:auto;bottom:auto;display:flex;flex-direction:column;gap:1.6vh;padding:1.8vh 1.4vh;border:4px solid var(--ink);border-radius:14px;
+  background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.25),transparent 45%),repeating-linear-gradient(0deg,rgba(60,40,15,.12) 0 3px,transparent 3px 26px),linear-gradient(90deg,#b49a6a,#d8c08a 40%,#9a804e);
+  box-shadow:0 10px 0 var(--ink),0 20px 50px rgba(0,0,0,.5),inset 0 0 0 4px rgba(255,255,255,.2)}
+#title.img-land .slab{flex:1;font-size:clamp(18px,5.4vh,46px);padding:.6vh 8px;display:grid;place-items:center}
+#title.img-land .slab.big{flex:1.35;font-size:clamp(26px,8vh,70px)}
+#title.img-land .home-icons{flex:none}
+#title.img-land .home-coins{position:absolute;top:-50px;right:0}
+#title.img-land .ibtn{width:clamp(40px,6.6vh,58px);height:clamp(40px,6.6vh,58px)}
+#title.img-land .row2{display:flex;gap:1.4vh;flex:1}
+@media (min-aspect-ratio:1/1){#title:not(.img-land) .home-menu{left:auto;right:max(16px,5vw);top:50%;bottom:auto;width:min(340px,40vw);transform:translateY(-45%)}#title:not(.img-land) .home-logo{font-size:clamp(46px,9vh,90px)}}
 #titleArt canvas,#hubArt canvas,#campArt canvas{width:100%;height:100%;display:block}
 .how{font-weight:800;font-size:15px;color:var(--muted);text-align:center;max-width:48ch;line-height:1.5;text-shadow:0 2px 6px #000}
 .coins{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-size:28px;letter-spacing:.03em;color:var(--gold);-webkit-text-stroke:4px var(--ink);paint-order:stroke fill;font-variant-numeric:tabular-nums}
@@ -284,14 +293,22 @@ p{margin:0}
 <section class="screen on" id="title">
   <div id="homeArt"></div>
   <div class="logo home-logo">Temple Pup<span>Biscuit the Brave</span></div>
-  <nav class="home-menu" aria-label="Main menu">
-    <div class="home-sign"><b id="homeHi">Welcome, explorer!</b><small id="homeNext"></small></div>
-    <button class="stone gold" id="playBtn"></button>
-    <button class="stone" id="hmEndless"></button>
-    <button class="stone" id="hmStyle"></button>
-    <button class="stone" id="hmBase"></button>
+  <button class="home-who" id="homeWho" aria-label="Switch player or restore your save"></button>
+  <nav class="home-menu" id="homeMenu" aria-label="Main menu">
+    <span class="coins home-coins"><span class="coin"></span><span class="cCoins">0</span></span>
+    <button class="slab teal big" id="playBtn">Play</button>
+    <button class="slab sand" id="hmEndless">Endless</button>
+    <button class="slab sand" id="hmStyle">Biscuit</button>
+    <button class="slab purple" id="hmTasks">Tasks</button>
+    <button class="slab teal" id="hmTrophy">Trophies</button>
+    <div class="home-icons">
+      <button class="ibtn" id="hmDaily" aria-label="Daily treasure"></button>
+      <button class="ibtn" id="hmShare" aria-label="Share and install"></button>
+      <button class="ibtn" id="hmSave" aria-label="Save and backup"></button>
+      <button class="ibtn" id="hmSnd" aria-label="Sound"></button>
+      <button class="ibtn" id="hmMus" aria-label="Music"></button>
+    </div>
   </nav>
-  <div class="home-snd"><button class="btn alt sm sndBtn">Sound: On</button><button class="btn alt sm musBtn">Music: On</button></div>
 </section>
 
 <section class="screen full" id="hub">
@@ -953,6 +970,9 @@ const ICON={
   rev:'<svg viewBox="0 0 24 24" fill="none" stroke="#2b1d10" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 8H6l4-4M4 16h14l-4 4"/></svg>',
   skull:'<svg viewBox="0 0 24 24"><path d="M12 2C7 2 3.5 5.5 3.5 10c0 2.8 1.4 4.6 3 5.6V19h3v-2h1v2h3v-2h1v2h3v-3.4c1.6-1 3-2.8 3-5.6C20.5 5.5 17 2 12 2z" fill="#fff7e3" stroke="#2b1d10" stroke-width="1.8" stroke-linejoin="round"/><circle cx="8.6" cy="10.5" r="2.3" fill="#2b1d10"/><circle cx="15.4" cy="10.5" r="2.3" fill="#2b1d10"/></svg>',
   share:'<svg viewBox="0 0 24 24" fill="none" stroke="#2b1d10" stroke-width="2" stroke-linejoin="round"><circle cx="18" cy="5" r="3" fill="#fff"/><circle cx="6" cy="12" r="3" fill="#fff"/><circle cx="18" cy="19" r="3" fill="#fff"/><path d="m8.6 10.7 6.8-4M8.6 13.3l6.8 4" stroke="#fff" stroke-width="2.4"/></svg>',
+  snd:'<svg viewBox="0 0 24 24" fill="none" stroke="#2b1d10" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg>',
+  sndOff:'<svg viewBox="0 0 24 24" fill="none" stroke="#2b1d10" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/><path d="m16 9 6 6M22 9l-6 6"/></svg>',
+  note:'<svg viewBox="0 0 24 24" fill="none" stroke="#2b1d10" stroke-width="2.2" stroke-linejoin="round"><path d="M9 18V5l11-2v13" /><circle cx="6" cy="18" r="3" fill="#fff"/><circle cx="17" cy="16" r="3" fill="#fff"/></svg>',
   check:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>',
   gift:'<svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="2" fill="#fff" stroke="#2b1d10" stroke-width="1.6"/><path d="M12 9v12M3 13h18" stroke="#2b1d10" stroke-width="1.6"/><path d="M12 9c-2-4-6-4-6-1s4 1 6 1c2 0 6 2 6-1s-4-3-6 1z" fill="#fff" stroke="#2b1d10" stroke-width="1.6"/></svg>'
 };
@@ -1428,7 +1448,8 @@ const dailyReady=()=>save.daily.last!==dayKey(new Date());
 const nextDay=()=>save.daily.last===yesterday()?(save.daily.streak%7)+1:1;
 let dailyShown=false;
 function tasksReady(){return save.tasks.filter(tk=>taskProg(tk)>=tk.n).length}
-function openHub(){
+function openHub(){openHome();checkAch()}
+function oldHub(){
   G=null;paused=false;hideHud();SFX.setPlaying(true);ensureTasks();buildJungle();checkAch();
   if(dailyReady()&&!dailyShown){dailyShown=true;openDaily();return}
   const ready=tasksReady();
@@ -1507,11 +1528,15 @@ function togglePause(){if(!G||G.state!=='play')return;paused=!paused;show(paused
 // home menu: each path starts the music, offers the daily treasure first, then goes where you tapped
 function fromHome(fn){SFX.setPlaying(true);ensureTasks();buildJungle();if(dailyReady()&&!dailyShown){dailyShown=true;openDaily();return}fn()}
 function homeBtn(id,ic,col,label,fn){const b=$(id);b.innerHTML=`<i style="background:${col}">${ic}</i><span></span>`;b.querySelector('span').textContent=label;b.onclick=()=>fromHome(fn)}
-homeBtn('#playBtn',ICON.star,'#e8452c','Adventure',openLevels);homeBtn('#hmEndless',ICON.inf,'#8a33e8','Endless',()=>openPrep(0,true));
-homeBtn('#hmStyle',ICON.paw,'#e3207a','Customize',openStyle);homeBtn('#hmBase',ICON.hut,'#1fae94','Jungle Base',openHub);
-function updateHome(){const n=Math.min(save.unlocked,LEVELS),c=chOf(n);$('#homeHi').textContent=save.unlocked>1?'Welcome back, explorer!':'Welcome, explorer!';
-  $('#homeNext').textContent=save.unlocked>1?`Next: ${CHAPTERS[c].n} ${c+1}-${(n-1)%PER+1} · ★ ${totalStars()}`:'A storm is waking the temple…'}
-function openHome(){G=null;paused=false;hideHud();updateHome();show('title')}
+const homeGo=(id,fn)=>{$(id).onclick=()=>fromHome(fn)};
+homeGo('#playBtn',openLevels);homeGo('#hmEndless',()=>openPrep(0,true));homeGo('#hmStyle',openStyle);homeGo('#hmTasks',openTasks);homeGo('#hmTrophy',openTrophies);
+$('#hmDaily').onclick=()=>{SFX.setPlaying(true);dailyShown=true;openDaily()};$('#hmShare').onclick=()=>openShare();$('#hmSave').onclick=()=>openBackup();$('#homeWho').onclick=()=>openBackup();
+$('#hmSnd').onclick=()=>setMuted(!save.muted);$('#hmMus').onclick=()=>setMusic(!save.music);
+$('#hmDaily').innerHTML=ICON.gift;$('#hmShare').innerHTML=ICON.share;$('#hmSave').innerHTML=ICON.save;
+function homeAudio(){$('#hmSnd').innerHTML=save.muted?ICON.sndOff:ICON.snd;$('#hmSnd').classList.toggle('off',save.muted);$('#hmMus').innerHTML=ICON.note;$('#hmMus').classList.toggle('off',!save.music)}
+function badge(el,v){let b=el.querySelector('.badge');if(!v){if(b)b.remove();return}if(!b){b=document.createElement('span');b.className='badge';el.appendChild(b)}b.textContent=v}
+function updateHome(){ensureTasks();badge($('#hmTasks'),tasksReady());badge($('#hmDaily'),dailyReady()?'!':0);homeAudio();wallet();const n=Math.min(save.unlocked,LEVELS),c=chOf(n);$('#playBtn').innerHTML='Play<small></small>';$('#playBtn small').textContent=save.unlocked>1?`Next: ${CHAPTERS[c].n} ${c+1}-${(n-1)%PER+1} · ★ ${totalStars()}`:'Start your adventure'}
+function openHome(){G=null;paused=false;hideHud();SFX.setPlaying(true);buildJungle();updateHome();show('title')}
 $('#homeBtn').onclick=openHome;updateHome();$('#hPause').onclick=togglePause;$('#resumeBtn').onclick=togglePause;
 $('#quitBtn').onclick=()=>{bankRun();paused=false;openHub()};
 function bankRun(){
@@ -1520,8 +1545,8 @@ function bankRun(){
 }
 setInterval(()=>{if(G&&G.state==='play')bankRun()},5000);
 addEventListener('pagehide',bankRun);addEventListener('beforeunload',bankRun);
-function setMuted(m){save.muted=m;persist();$$('.sndBtn').forEach(b=>b.textContent=m?'Sound: Off':'Sound: On');$('#hSound').textContent=m?'×':'♪';$('#hSound').setAttribute('aria-label',m?'Turn sound on':'Turn sound off')}
-function setMusic(m){save.music=m;persist();$$('.musBtn').forEach(b=>b.textContent=m?'Music: On':'Music: Off');SFX.refresh()}
+function setMuted(m){save.muted=m;persist();if($('#hmSnd'))homeAudio();$$('.sndBtn').forEach(b=>b.textContent=m?'Sound: Off':'Sound: On');$('#hSound').textContent=m?'×':'♪';$('#hSound').setAttribute('aria-label',m?'Turn sound on':'Turn sound off')}
+function setMusic(m){save.music=m;persist();if($('#hmSnd'))homeAudio();$$('.musBtn').forEach(b=>b.textContent=m?'Music: On':'Music: Off');SFX.refresh()}
 $$('.sndBtn').forEach(b=>b.onclick=()=>setMuted(!save.muted));$('#hSound').onclick=()=>setMuted(!save.muted);
 $$('.musBtn').forEach(b=>b.onclick=()=>setMusic(!save.music));
 setMuted(save.muted);setMusic(save.music);
@@ -1906,7 +1931,26 @@ function buildHomeBg(w,h){const x=homeBg.cv.getContext('2d'),L=homeLayout(w,h),r
   const big=(bx,by,a,s2)=>{for(let k=0;k<6;k++)leaf(x,bx,by,s2*(1-k*.07),a+(k-2.5)*.33,['#2f7a35','#4aa043','#256b2c'][k%3],'#0f3518')};
   const m=Math.min(w,h);big(-20,h+10,-.55,m*.42);big(w+20,h+20,Math.PI+.6,m*.36);big(-30,-20,.75,m*.3);big(w+30,-20,Math.PI-.75,m*.28);
 }
+// the painted home picture (art/home.jpg next to the page); without it the drawn scene below is used
+const HOMEIMG=new Image();HOMEIMG.onload=()=>{HOMEIMG.ok=true;homeFit.key=''};HOMEIMG.src='home.jpg';
+const homeFit={key:''};
+function homeImgScene(c,w,h,t){const I=HOMEIMG,iw=I.naturalWidth,ih=I.naturalHeight,land=w>=h*1.05,el=$('#title'),menu=$('#homeMenu');
+  const key=w+'x'+h;if(homeFit.key!==key){homeFit.key=key;el.classList.toggle('img-land',land);
+    if(land){const sc=Math.max(w/iw,h/ih);Object.assign(homeFit,{s:sc,dx:(w-iw*sc)/2,dy:(h-ih*sc)*.08,ph:h});
+      const X=v=>homeFit.dx+v*iw*sc,Y=v=>homeFit.dy+v*ih*sc;
+      let L=X(.625),T=Y(.125),R=Math.min(w-8,X(.99)),B=Math.min(h-10,Y(.885));if(R-L<240){L=Math.max(8,R-260)}
+      Object.assign(menu.style,{left:L+'px',top:Math.max(8,T)+'px',width:(R-L)+'px',height:(B-Math.max(8,T))+'px'});
+      Object.assign($('#homeWho').style,{left:X(.33)+'px',top:Y(.075)+'px',width:(X(.68)-X(.33))+'px',height:(Y(.115)-Y(.075))+'px'})}
+    else{Object.assign(menu.style,{left:'',top:'',width:'',height:''});const top=menu.getBoundingClientRect().top;const ph=Math.max(h*.45,top+36),sc=ph/ih;
+      Object.assign(homeFit,{s:sc,ph,dy:0,dx:clamp(w/2-iw*sc*.36,w-iw*sc,0)})}}
+  const F=homeFit;c.fillStyle='#173a22';c.fillRect(0,0,w,h);c.drawImage(I,F.dx,F.dy,iw*F.s,ih*F.s);
+  if(!land){const g=c.createLinearGradient(0,F.ph-110,0,F.ph+10);g.addColorStop(0,'rgba(23,58,34,0)');g.addColorStop(1,'#173a22');c.fillStyle=g;c.fillRect(0,F.ph-110,w,h-F.ph+110);
+    const g2=c.createLinearGradient(0,0,0,200);g2.addColorStop(0,'rgba(20,10,4,.92)');g2.addColorStop(.45,'rgba(20,10,4,.6)');g2.addColorStop(1,'rgba(20,10,4,0)');c.fillStyle=g2;c.fillRect(0,0,w,200)}
+  glow(c,F.dx+iw*F.s*.087,F.dy+ih*F.s*.095,ih*F.s*.11,'255,210,90',.3+.15*Math.sin(t*2));
+  for(let i=0;i<10;i++)glow(c,(i*157+t*16)%w,F.dy+ih*F.s*(.45+.3*Math.sin(t*.7+i)),6,'230,255,150',.55*(Math.sin(t*3+i)+1)/2);
+}
 function homeScene(c,w,h,t){
+  if(HOMEIMG.ok){homeImgScene(c,w,h,t);return}
   if(homeBg.w!==w||homeBg.h!==h)buildHomeBg(w,h);c.drawImage(homeBg.cv,0,0,w,h);const L=homeLayout(w,h);
   c.save();c.globalCompositeOperation='lighter';c.translate(L.pyX,L.pyY*.42);for(let i=0;i<12;i++){c.rotate(TAU/12);c.fillStyle=`rgba(255,240,190,${.05+.03*Math.sin(t*1.5+i)})`;c.beginPath();c.moveTo(0,0);c.lineTo(-30,-Math.max(w,h));c.lineTo(30,-Math.max(w,h));c.fill()}c.restore();
   const th=L.pyW*.085;for(const k of[-1,1])drawFire(c,L.pyX+k*L.pyW*.12,L.pyY-th*.2,t+(k>0?1:0),Math.max(.45,L.pyW/700));
